@@ -1,4 +1,4 @@
-baseurl = "www.mattchaib.com/"
+baseurl = "/"
 languageCode = "en-us"
 title = "Matt Chaib's blog"
 theme = "hugo-xmin"
@@ -28,6 +28,9 @@ footnotereturnlinkcontents = "↩"
     name = "Tags"
     url = "/tags/"
     weight = 4
+[[menu.main]]
+    name = "Subscribe"
+    url = "/index.xml"
 
 [params]
     description = "A website built through Hugo and blogdown."
