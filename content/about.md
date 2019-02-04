@@ -4,4 +4,4 @@ author: Matt Chaib
 date: '2019-02-04'
 ---
 
-I study biology at the University of York. In my spare time I read lots of [books](/posts/2019/02/04/read-books/)
+I study biology at the University of York. In my spare time I read lots of [books](/post/2019/02/04/read-books/)
