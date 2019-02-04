@@ -39,7 +39,7 @@ mycols <- c("dodgerblue3","chartreuse3", "goldenrod1", "firebrick2", "grey30")
 
 In this article, *setting the stage*, I would like to give an overview on what we can expect to find out from text mining an individual Hansard and introduce the tools and ideas that will be used in later analyses. 
 
-A [Hansard](#hansard), which is really just a transcript of a debate held in Parliament, is a structured piece of text. Text is organised chronologically into speeches given by each [peer](#peer)/MP- not unlike the script for a play. What is the relevance of this to our analysis? It turns out that this structure allows us to access lots of information which is separate from the text itself. So our first big question is: **What can we measure in the text?**
+A [Hansard](#hansard), which is really just a transcript of a debate held in Parliament, is a structured piece of text. Text is organised chronologically into speeches given by each [peer](#peer)/MP- not unlike the script for a play. What is the relevance of this to our analysis? It turns out that this structure allows us to access lots of information which is separate from the text itself. So our first big question is: **What can we measure?**
 
 Here are some examples before we move on:
 
@@ -47,13 +47,13 @@ Here are some examples before we move on:
 * How often each MP spoke.
 * What order MPs spoke in.
 
-In the house of Lords, each speakers name is prefixed by a title- Lord, Baroness, Lady, etc... From this we can infer the gender of the MP. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself. 
+In the house of Lords, each speaker's name is prefixed by a title- Lord, Baroness, Lady, etc... From this we can infer the gender of the peer. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself. 
 
 We are starting to build up the backbone of our analysis. To make things clearer, here is a diagram:
 
 ![Explanatory and response variables within a Hansard text. ](/post/2019-02-04-hansard-text-analysis-part-1_files/expl_vs_res2.png)
 
-There is information in the Hansard, which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.
+There is information in the Hansard which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.
 
 
 Before we look at the text data itself, we need to get our bearings. We will begin by visualising who was present, and counting the number of speeches made by different groups of peers. 
@@ -73,13 +73,13 @@ full_speeches %>%
   theme_classic()
 ```
 
-The figure shows that the majority of MPs belong to the three major parties or [crossbench](#Crossbench), and that the faction with the most MPs present are the Conservatives. I have also coloured in the bars to indicate the proportion of male versus female peers in each party. Needless to say, the vast majority of female representation in the house comes from Labour and the Liberal Democrats.    
+This figure shows that the majority of MPs belong to the three major parties or [crossbench](#Crossbench), and that the faction with the most MPs present are the Conservatives. I have also coloured in the bars to indicate the proportion of male versus female peers in each party. Needless to say, the vast majority of female representation in the house comes from Labour and the Liberal Democrats.    
 
 To get this data, we have just counted up all the unique speakers, and recorded their party and gender using information from the headers. 
 
 ![The Hansard text as it appears on the Parliamentary Hansard website.](/post/2019-02-04-hansard-text-analysis-part-1_files/hans_names.png)
 
-A more robust system might combine this scraping with the use of a curated database of current MPs and their associated information, but I'm trying to work exclusively with data from the Hansard for now. This actually touches on a general point I would like to elaborate on in a later article. A publically maintained and curated database could make this process much easier and more accurate. It would cost little to implement and maintain for a voluntary group (or even paid civil servants). The point is, although the Government is getting better at sharing data, there is a general failure to make the data that is shared adequate for research or computational analysis. It's a kind of quasi-transparency. Simple structures could be put in place to streamline available data into standardised, tidy, well-organised file formats. Instead we often see MPs accounts uploaded as PDFs of scrawled, handwritten receipts; no system to download large batches of available files; or a popular one is publishing a CSV of the processed data, but not the raw data. We are lucky in this case to have access to a plaintext file and not have to web scrape the Hansard for ourselves.
+A more robust system might combine this scraping with the use of a curated database of current MPs and their associated information, but I'm trying to work exclusively with data from the Hansard for now. This actually touches on a general point I would like to elaborate on in a later article. A publically maintained and curated database could make this process much easier and more accurate. It would cost little to implement and maintain for a voluntary group (or even paid civil servants). The point is, although the Government is getting better at sharing data, there is a general failure to make the data that is shared adequate for research or computational analysis. It's a kind of quasi-transparency. Simple structures could be put in place to streamline available data into standardised, tidy, well-organised file formats. Instead we often see MPs accounts uploaded as PDFs of scrawled, handwritten receipts; no system to download large batches of available files; or a popular one is publishing a spreadsheet of the processed data, but not the raw data. We are lucky in this case to have access to a plaintext file and not have to web scrape the Hansard for ourselves.
 
 ### Which MP or group of MPs spoke most often?
 
