@@ -50,9 +50,7 @@ Then there are other forms of metadata. In the house of Lords, each speakers nam
 
 One can see, we are already building up the backbone of our analysis. To make things clearer, here is a diagram:
 
-```{r pressure, echo=FALSE, fig.cap="Explanatory versus response variables", out.width = '100%'}
-knitr::include_graphics("../eu_hansard/drawings/exp_vs_res.png")
-```
+![Explanatory and response variables within a Hansard text. ](/post/2019-02-04-hansard-text-analysis-part-1_files/expl_vs_res2.png)
 
 There is information in the Hansard, which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.
 
@@ -113,8 +111,8 @@ We first count the number of appearances each individual made in the Hansard. Wh
 However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches.
 
 **Example calculation:** 
-*There were 27 Conservative MPs and 93 MPs in total, `27 / 93 = 0.29` so 29% of the speakers present are Conservatives. 
-If there were 247 speeches throughout the day we would expect `0.29 * 247 = 72` speeches to be given by Conservative MPs.*
+*There were 28 Conservative MPs and 95 MPs in total, `28 / 95 = 0.29` so 29% of the speakers present are Conservatives. 
+If there were 251 speeches throughout the day we would expect `0.29 * 251 = 73` speeches to be given by Conservative MPs.*
 
 In reality this number was closer to 100. Let’s look into this in more detail…
 
@@ -144,7 +142,7 @@ speech_counts %>%
 ```
 
 ### Figure 2 {.tabset}
-```{r}
+```{r echo = FALSE}
 speech_counts %>% count(n_speeches) %>% mutate(tot = sum(n), p = n/tot)
 
 speech_counts %>%
@@ -214,7 +212,7 @@ engagement_per_quarter
 ```
 
 ### Figure 4 {.tabset}
-```{r}
+```{r echo=FALSE}
 epq_p <- engagement_per_quarter %>% 
   group_by(party_f) %>% 
   mutate(s = sum(n), p = n/s)

@@ -33,11 +33,9 @@ tags:
 </ul>
 <p>Then there are other forms of metadata. In the house of Lords, each speakers name is prefixed by a title- Lord, Baroness, Lady, etc… From this we can infer the gender of the MP. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself.</p>
 <p>One can see, we are already building up the backbone of our analysis. To make things clearer, here is a diagram:</p>
-<div class="figure"><span id="fig:pressure"></span>
-<img src="../eu_hansard/drawings/exp_vs_res.png" alt="Explanatory versus response variables" width="100%" />
-<p class="caption">
-Figure 1: Explanatory versus response variables
-</p>
+<div class="figure">
+<img src="/post/2019-02-04-hansard-text-analysis-part-1_files/expl_vs_res2.png" alt="Explanatory and response variables within a Hansard text." />
+<p class="caption">Explanatory and response variables within a Hansard text.</p>
 </div>
 <p>There is information in the Hansard, which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.</p>
 <p>Before we look at the text data itself, we need to get our bearings. We will begin by visualising who was present, and counting the number of speeches made by different groups of MPs.</p>
@@ -58,7 +56,7 @@ Figure 1: Explanatory versus response variables
 <p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>We first count the number of appearances each individual made in the Hansard. When considering different groups of speakers (for instance, the labour party vs the conservative party), it is important to remember that each group is present in different numbers. This affects how we think about the results, for example: if the conservatives have 4% more speakers than the labour party, we would expect to see them give 4% more of the speeches.</p>
 <p>However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches.</p>
-<p><strong>Example calculation:</strong> <em>There were 27 Conservative MPs and 93 MPs in total, <code>27 / 93 = 0.29</code> so 29% of the speakers present are Conservatives. If there were 247 speeches throughout the day we would expect <code>0.29 * 247 = 72</code> speeches to be given by Conservative MPs.</em></p>
+<p><strong>Example calculation:</strong> <em>There were 28 Conservative MPs and 95 MPs in total, <code>28 / 95 = 0.29</code> so 29% of the speakers present are Conservatives. If there were 251 speeches throughout the day we would expect <code>0.29 * 251 = 73</code> speeches to be given by Conservative MPs.</em></p>
 <p>In reality this number was closer to 100. Let’s look into this in more detail…</p>
 <pre><code>## # A tibble: 95 x 3
 ##    name                            n_speeches party
@@ -85,7 +83,6 @@ Figure 1: Explanatory versus response variables
 </div>
 <div id="figure-2" class="section level3 tabset">
 <h3>Figure 2</h3>
-<pre class="r"><code>speech_counts %&gt;% count(n_speeches) %&gt;% mutate(tot = sum(n), p = n/tot)</code></pre>
 <pre><code>## # A tibble: 10 x 4
 ##    n_speeches     n   tot      p
 ##         &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
@@ -99,12 +96,6 @@ Figure 1: Explanatory versus response variables
 ##  8          8     2    95 0.0211
 ##  9          9     2    95 0.0211
 ## 10         12     2    95 0.0211</code></pre>
-<pre class="r"><code>speech_counts %&gt;%
-  filter(party %in% c(&quot;(Con)&quot;, &quot;(Lab)&quot;, &quot;(LD)&quot;, &quot;(CB)&quot;)) %&gt;%
-  ggplot(aes(n_speeches)) +
-  stat_ecdf(aes(colour = party)) +
-  scale_x_continuous(breaks = c(1:12)) + 
-  scale_colour_manual(values=mycols)</code></pre>
 <p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 </div>
@@ -165,17 +156,6 @@ Figure 1: Explanatory versus response variables
 </div>
 <div id="figure-4" class="section level3 tabset">
 <h3>Figure 4</h3>
-<pre class="r"><code>epq_p &lt;- engagement_per_quarter %&gt;% 
-  group_by(party_f) %&gt;% 
-  mutate(s = sum(n), p = n/s)
-
-
-epq_p %&gt;%
-  ggplot(aes(party_f, p)) +
-  geom_col(aes(fill = party_f)) +
-  facet_wrap(~sec) + 
-  scale_fill_manual(values = mycols) +
-  geom_text(aes(label=n), position=position_dodge(width=0.9), vjust=2)</code></pre>
 <p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 </div>
