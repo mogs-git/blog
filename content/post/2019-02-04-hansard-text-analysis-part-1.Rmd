@@ -138,7 +138,8 @@ speech_counts %>%
   geom_col(aes(fill = party)) + 
   scale_fill_manual(values = mycols) +
   scale_x_continuous(breaks = c(1:12)) + 
-  scale_y_continuous(breaks = seq(0,40,5))
+  scale_y_continuous(breaks = seq(0,40,5)) +
+  theme_bw()
 ```
 
 ### Figure 2 {.tabset}
@@ -150,7 +151,8 @@ speech_counts %>%
   ggplot(aes(n_speeches)) +
   stat_ecdf(aes(colour = party)) +
   scale_x_continuous(breaks = c(1:12)) + 
-  scale_colour_manual(values=mycols)
+  scale_colour_manual(values=mycols) + 
+  theme_bw()
 ```
 
 ## 
@@ -202,13 +204,13 @@ engagement_per_quarter <- appearances_tib %>%
   group_by(sec, party_f) %>% 
   count() 
 
+#engagement_per_quarter
+
 engagement_per_quarter %>%
   ggplot(aes(party_f, n)) +
   geom_col(aes(fill = party_f)) +
   facet_wrap(~sec) + 
   scale_fill_manual(values = mycols)
-
-engagement_per_quarter
 ```
 
 ### Figure 4 {.tabset}
@@ -223,7 +225,8 @@ epq_p %>%
   geom_col(aes(fill = party_f)) +
   facet_wrap(~sec) + 
   scale_fill_manual(values = mycols) +
-  geom_text(aes(label=n), position=position_dodge(width=0.9), vjust=2)
+  geom_text(aes(label=n), position=position_dodge(width=0.9), vjust=2) +
+  theme_bw()
 ```
 
 ## 
