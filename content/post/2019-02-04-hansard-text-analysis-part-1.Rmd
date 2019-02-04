@@ -4,6 +4,7 @@ author: Matt Chaib
 date: '2019-02-04'
 slug: hansard-text-analysis-part-1
 categories:
+  - Hansard Text Analysis
   - R
 tags:
   - text analysis
