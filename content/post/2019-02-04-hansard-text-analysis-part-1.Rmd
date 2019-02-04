@@ -127,7 +127,7 @@ speech_counts
 
 Here, we have counted the number of speeches made by each MP. We can look through the table for patterns at a glance (some might already notice one pattern), but what does this data look like as a whole?
 
-##{.tabset .tabset-fade}
+## {.tabset .tabset-fade}
 
 ### Figure 1 {.tabset}
 ```{r, echo=FALSE}
@@ -143,8 +143,8 @@ speech_counts %>%
 ```
 
 ### Figure 2 {.tabset}
-```{r echo = FALSE}
-speech_counts %>% count(n_speeches) %>% mutate(tot = sum(n), p = n/tot)
+```{r echo=FALSE}
+#speech_counts %>% count(n_speeches) %>% mutate(tot = sum(n), p = n/tot)
 
 speech_counts %>%
   filter(party %in% c("(Con)", "(Lab)", "(LD)", "(CB)")) %>%
@@ -164,14 +164,14 @@ Notice in figure 2 that the [ECDF](https://www.dummies.com/education/math/statis
 Going back to the Hansard, Lords speak in sequence (to state the obvious). The order in which Lords speak is something we will look at in much more detail in a later post, but for now we will check two things. Firstly, how often do Lords from the same party speak consecutively? And secondly, can we say anything about which parts of the day were most important to each party- with what parts of the text did each party engage most? 
 
 ```{r, echo=FALSE}
-appearances_tib %>%
-  mutate(next_party = lead(party),
-         next_name = lead(name),
-         match = party != next_party &! name == next_name) %>%
-  filter(match) %>%
-  count(party) %>%
-  mutate(tot = sum(n), p = round(n/tot,2)) %>%
-  arrange(desc(p))
+# appearances_tib %>%
+#   mutate(next_party = lead(party),
+#          next_name = lead(name),
+#          match = party != next_party &! name == next_name) %>%
+#   filter(match) %>%
+#   count(party) %>%
+#   mutate(tot = sum(n), p = round(n/tot,2)) %>%
+#   arrange(desc(p))
 
 appearances_tib %>%
   mutate(next_party = lead(party),
@@ -185,7 +185,7 @@ appearances_tib %>%
 
 This table shows the number of times a pair of Lords from the same party speak consecutively in the text. More Conservative Lords are present and speak more often, so we would expect them to form more pairs. How can we get some idea of the base level of expected clumping given the number of Lords- what distribution do we assume is "normal"? The only thing I can think to do is compare how likely each group is to appear alone, compared to how likely they are to appear together. There are 72 instances of a Conservative Lord speaking singly, and 22 consecutively, so `22/(22+72)=0.23`. For Labour this is `5/(5+45)=0.1`. For Conservatives, every 4-5 speeches made are paired/consecutive, for Labour, only every 10 speeches they make are made consecutively. This compounds with the fact that Conservatives make more speeches in general. 
 
-##{.tabset .tabset-fade}
+## {.tabset .tabset-fade}
 
 ### Figure 3 {.tabset}
 ```{r, echo=FALSE}

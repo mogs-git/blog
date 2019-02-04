@@ -88,19 +88,6 @@ Figure 1: CB=crossbench, GP=green party, PC=Privy council, UUP=Ulster Unionists 
 </div>
 <div id="figure-2" class="section level3 tabset">
 <h3>Figure 2</h3>
-<pre><code>## # A tibble: 10 x 4
-##    n_speeches     n   tot      p
-##         &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-##  1          1    40    95 0.421 
-##  2          2    19    95 0.2   
-##  3          3    17    95 0.179 
-##  4          4     6    95 0.0632
-##  5          5     4    95 0.0421
-##  6          6     1    95 0.0105
-##  7          7     2    95 0.0211
-##  8          8     2    95 0.0211
-##  9          9     2    95 0.0211
-## 10         12     2    95 0.0211</code></pre>
 <p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 </div>
@@ -109,17 +96,6 @@ Figure 1: CB=crossbench, GP=green party, PC=Privy council, UUP=Ulster Unionists 
 <p>Most MPs made one speech (about 40%), and only a little over 20% of the MPs made more than three speeches (19 of 93 Lords). We know that Conservatives made more speeches than expected- but where did they make these gains? Did they just have one or two Lords that made large numbers of speeches, or did most Conservatives just speak a little bit more often. Within the distribution of Conservative Lords, this difference seems to be driven not only by the tail of the distribution (a small number of Lords who spoke a lot), but also by a group of Lords of who made three speeches- Conservatives making up half the Lords of this group. Conservative Lords made a median of 3 speeches in the session, more than the median number of speeches made by either Labour, Lib Dem or CB Lords (2,1 and 1 respectively). In summary, not only do a small number of Conservative Lords control the far tail of the distribution, your average Conservative weighs in more often than your average peer from any other major group, even <em>in spite</em> of them having more speakers to begin with.</p>
 <p>Notice in figure 2 that the <a href="https://www.dummies.com/education/math/statistics/step-step-empirical-cumulative-distribution-function-r/">ECDF</a> of the Conservative party sits to the right of the other parties, meaning that for any given “number of speeches” the probability of a Conservative making that many speeches or less is higher than for Lords in other parties (based on the same data as our bar chart).</p>
 <p>Going back to the Hansard, Lords speak in sequence (to state the obvious). The order in which Lords speak is something we will look at in much more detail in a later post, but for now we will check two things. Firstly, how often do Lords from the same party speak consecutively? And secondly, can we say anything about which parts of the day were most important to each party- with what parts of the text did each party engage most?</p>
-<pre><code>## # A tibble: 8 x 4
-##   party           n   tot     p
-##   &lt;chr&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
-## 1 (Con)          73   207  0.35
-## 2 (Lab)          45   207  0.22
-## 3 (CB)           37   207  0.18
-## 4 (LD)           34   207  0.16
-## 5 (PC)            8   207  0.04
-## 6 (GP)            4   207  0.02
-## 7 (spiritual)     4   207  0.02
-## 8 (UUP)           2   207  0.01</code></pre>
 <pre><code>## # A tibble: 4 x 4
 ##   party     n   tot     p
 ##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
