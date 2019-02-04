@@ -188,7 +188,7 @@ This table shows the number of times a pair of Lords from the same party speak c
 ## {.tabset .tabset-fade}
 
 ### Figure 3 {.tabset}
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.cap="Number of speeches in each quarter (panel) of the Hansard."}
 get_quartiles <- function(df) {
   nr <- df %>% nrow(.)
   nr <- c(1:4) * nr/4 
@@ -211,6 +211,8 @@ engagement_per_quarter %>%
   geom_col(aes(fill = party_f)) +
   facet_wrap(~sec) + 
   scale_fill_manual(values = mycols) +
+  xlab(label = "party") + 
+  ylab(label = "number of speeches") +
   theme_bw()
 ```
 
@@ -227,6 +229,8 @@ epq_p %>%
   facet_wrap(~sec) + 
   scale_fill_manual(values = mycols) +
   geom_text(aes(label=n), position=position_dodge(width=0.9), vjust=2) +
+  xlab(label = "party") + 
+  ylab(label = "probability") +
   theme_bw()
 ```
 
