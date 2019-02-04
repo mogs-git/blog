@@ -48,9 +48,9 @@ Here are some examples before we move on:
 
 Then there are other forms of metadata. In the house of Lords, each speakers name is prefixed by a title- Lord, Baroness, Lady, etc... From this we can infer the gender of the MP. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself. 
 
-One can see, we are already building up the backbone of our analysis. To make thing clearer, here is a diagram:
+One can see, we are already building up the backbone of our analysis. To make things clearer, here is a diagram:
 
-```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+```{r pressure, echo=FALSE, fig.cap="Explanatory versus response variables", out.width = '100%'}
 knitr::include_graphics("../eu_hansard/drawings/exp_vs_res.png")
 ```
 
@@ -78,9 +78,7 @@ The figure shows that the majority of MPs belong to the three major parties or c
 
 To get this data, we have just counted up all the unique speakers, and recorded their party and gender using information from the headers. 
 
-```{r, echo=FALSE, fig.cap="A caption", out.width = '100%'}
-knitr::include_graphics("../eu_hansard/drawings/hans_names.png")
-```
+![The Hansard text as it appears on the Parliamentary Hansard website.](/post/2019-02-04-hansard-text-analysis-part-1_files/hans_names.png)
 
 A more robust system might combine this scraping with the use of a curated database of current MPs and their associated information, but I'm trying to work exclusively with data from the Hansard for now. This actually touches on a general point I would like to elaborate on in a later article. A publically maintained and curated database could make this process much easier and more accurate. It would cost little to implement and maintain for a voluntary group (or even paid civil servants). The point is, although the Government is getting better at sharing data, there is a general failure to make the data that is shared adequate for research or computational analysis. It's a kind of quasi-transparency. Simple structures could be put in place to streamline available data into standardised, tidy, well-organised file formats. Instead we often see MPs accounts uploaded as PDFs of scrawled, handwritten receipts; no system to download large batches of available files; or a popular one is publishing a CSV of the processed data, but not the raw data. We are lucky in this case to have access to a plaintext file and not have to web scrape the Hansard for ourselves.
 
