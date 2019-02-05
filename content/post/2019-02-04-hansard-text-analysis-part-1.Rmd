@@ -85,7 +85,7 @@ A more robust system might combine this scraping with the use of a curated datab
 
 The next interesting thing to look at might be which party is making the most speeches. 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.cap="The red bars are the expected number of speeches, the blue bars are the number of speeches that were actually made."}
 # Number of speeches by party
 speeches_by_party <- appearances_tib %>% 
   group_by(party) %>% 
@@ -130,8 +130,8 @@ Here, we have counted the number of speeches made by each MP. We can look throug
 
 ## {.tabset .tabset-fade}
 
-### Figure 1 {.tabset}
-```{r, echo=FALSE}
+### Figure 3 {.tabset}
+```{r, echo=FALSE, fig.cap="The distribution of speech numbers coloured by party."}
 speech_counts %>%
   group_by(n_speeches, party) %>%
   summarise(count = n()) %>%
@@ -143,8 +143,8 @@ speech_counts %>%
   theme_bw()
 ```
 
-### Figure 2 {.tabset}
-```{r echo=FALSE}
+### Figure 4 {.tabset}
+```{r echo=FALSE, fig.cap="The distribution of speech numbers as an empirical cumulative distribution function."}
 #speech_counts %>% count(n_speeches) %>% mutate(tot = sum(n), p = n/tot)
 
 speech_counts %>%
@@ -188,7 +188,7 @@ This table shows the number of times a pair of Lords from the same party speak c
 
 ## {.tabset .tabset-fade}
 
-### Figure 3 {.tabset}
+### Figure 5 {.tabset}
 ```{r, echo=FALSE, fig.cap="Number of speeches in each quarter (panel) of the Hansard."}
 get_quartiles <- function(df) {
   nr <- df %>% nrow(.)
@@ -217,8 +217,8 @@ engagement_per_quarter %>%
   theme_bw()
 ```
 
-### Figure 4 {.tabset}
-```{r echo=FALSE}
+### Figure 6 {.tabset}
+```{r echo=FALSE, fig.cap="As above but y values are speeches as proportion of total speeches made by each party."}
 epq_p <- engagement_per_quarter %>% 
   group_by(party_f) %>% 
   mutate(s = sum(n), p = n/s)
