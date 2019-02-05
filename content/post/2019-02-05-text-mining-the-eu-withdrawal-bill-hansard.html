@@ -29,13 +29,19 @@ tags:
 <div id="speech-lengths" class="section level4">
 <h4>Speech lengths</h4>
 <p>We’ll start with the simplest detail relating to the words in our Hansard- how many are used in total each speech.</p>
-<p><img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-2-1.png" width="672" /> The vast majority of speeches were at the shorter end of the distribution. The median number of words used was 135, with 75% of speeches using less than 418 words. The top 25% of speeches in terms of word counts range from 418 to almost 1800.</p>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-2-1.png" alt="Distribution of speech lengths with vertical bars for lower quartile, median and upper quartile." width="672" />
+<p class="caption">
+Figure 1: Distribution of speech lengths with vertical bars for lower quartile, median and upper quartile.
+</p>
+</div>
+<p>The vast majority of speeches were at the shorter end of the distribution. The median number of words used was 135, with 75% of speeches using less than 418 words. The top 25% of speeches in terms of word counts range from 418 to almost 1800.</p>
 <p>For comparison, take a look at Baroness Smith’s 135 word speech <a href="http://bit.ly/2SaRP80" target="_blank">here</a> and Baroness Stowell’s 420 word speech <a href="http://bit.ly/2SaKh4Z" target="_blank">here</a> for comparison.. Using my internal “speech length” indicator, these results are telling me that 75% of speeches are not really very long at all. Indeed, a 400 word speech only takes 1.5 to 2 minutes to read aloud.</p>
 <p>We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?</p>
 <div class="figure"><span id="fig:unnamed-chunk-4"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-4-1.png" alt="The relationship between the number of speeches a lord gives and the number of words they use." width="960" />
 <p class="caption">
-Figure 1: The relationship between the number of speeches a lord gives and the number of words they use.
+Figure 2: The relationship between the number of speeches a lord gives and the number of words they use.
 </p>
 </div>
 <p>As we might expect, the more speeches you give, the more words you use in total. But this correlation is far from perfect and there is a glaring outlier in the two Lords who made 12 speeches both using hardly any words.</p>
@@ -43,7 +49,7 @@ Figure 1: The relationship between the number of speeches a lord gives and the n
 <div class="figure"><span id="fig:unnamed-chunk-5"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-5-1.png" alt="As above but with specific boxplots for each peer." width="960" />
 <p class="caption">
-Figure 2: As above but with specific boxplots for each peer.
+Figure 3: As above but with specific boxplots for each peer.
 </p>
 </div>
 <p>There are clearly different strategies, or perhaps roles, for each different MP. Baroness Hayter makes a similar number of speeches to Tebbit and Hannay, but her speeches are generally longer (none being exceptionally short or long). Lord Taylor, in contrast has an incredibly tight distribution of very short speeches. This is telling- he is in fact the whip of the Conservative party, so his speeches consist exclusively of short rebukes. Lord Howard, a eurosceptic, speaks as a contrarian to many of the amendments moved by other MPs, leading to a large number of short arguments. Lord Bridges, who shows the most variation in speech lengths, was the Government’s secretary for DxEU.</p>
@@ -127,7 +133,7 @@ Figure 2: As above but with specific boxplots for each peer.
 <div class="figure"><span id="fig:unnamed-chunk-8"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-8-1.png" alt="If a word appears in 8 documents, how does the IDF change as we increase the number of documents?" width="672" />
 <p class="caption">
-Figure 3: If a word appears in 8 documents, how does the IDF change as we increase the number of documents?
+Figure 4: If a word appears in 8 documents, how does the IDF change as we increase the number of documents?
 </p>
 </div>
 <p>The unlogged IDF shown for comparison. We just log the value so that this “IDF multiplier” stays within a reasonable range- the IDF increases in a linear way as the number of documents increases by orders of magnitude.</p>
@@ -142,7 +148,7 @@ Figure 3: If a word appears in 8 documents, how does the IDF change as we increa
 <div class="figure"><span id="fig:unnamed-chunk-9"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-9-1.png" alt="The words are on the y axis and their TF-IDF is the position of each bar on the x axis. Each panel is a different speech." width="960" />
 <p class="caption">
-Figure 4: The words are on the y axis and their TF-IDF is the position of each bar on the x axis. Each panel is a different speech.
+Figure 5: The words are on the y axis and their TF-IDF is the position of each bar on the x axis. Each panel is a different speech.
 </p>
 </div>
 <p>Looks messy, let’s talk it through. Generally, TF-IDF seems to have pulled out words that are important in these speeches ranked in the top 10. There are also words that are important but won’t make sense without further context (speech 1 has it’s top word as “drink” because the peer mentions the “food and drink federation” repeatedly). Other words seem to not have the “right” rank if we were to do it ourselves intuitively. Finally, there are words with a high TF-IDF that aren’t representative of the speech at all (“romans” doesn’t really tell us anything about speech 152). But in general, we can see that speech 148 is about womens rights, 109 about Euratom and nuclear safety and 228 about the role of devolved administrations. 1 and 106 are less clear but seem to be about fair rights for EU nationals and UK citizens. Speech 152 seems a bit unclear and no one word has a particularly high TF-IDF anyway.</p>
@@ -171,7 +177,7 @@ Figure 4: The words are on the y axis and their TF-IDF is the position of each b
 <div class="figure"><span id="fig:unnamed-chunk-11"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-11-1.png" alt="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely." width="1440" />
 <p class="caption">
-Figure 5: The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (<a href="https://slowkow.com/" class="uri">https://slowkow.com/</a>) for making ggrepel which organises the text so nicely.
+Figure 6: The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (<a href="https://slowkow.com/" class="uri">https://slowkow.com/</a>) for making ggrepel which organises the text so nicely.
 </p>
 </div>
 <p>Early on in the debate, there’s lots of talk about “citizens”. Then there is a period of debate about nuclear bodies/Euratom. Then a period where lots of industries and issues are mentioned including education, fishing, the NHS and women’s rights. The rest of the debate is largely about Parliamant’s role in the decisions made by the government, and the assurances for devolved administrations.</p>

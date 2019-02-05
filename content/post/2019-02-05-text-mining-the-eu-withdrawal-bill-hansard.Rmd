@@ -44,7 +44,7 @@ Another thing to consider is that the Hansard has a temporal element, meaning we
 
 We'll start with the simplest detail relating to the words in our Hansard- how many are used in total each speech. 
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE}
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Distribution of speech lengths with vertical bars for lower quartile, median and upper quartile."}
 at_nostop <- appearances_tib %>%
   unnest_tokens(word, speeches) %>%
   count(speech_id, word, sort = TRUE) %>%
