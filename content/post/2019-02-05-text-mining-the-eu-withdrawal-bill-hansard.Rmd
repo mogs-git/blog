@@ -330,7 +330,7 @@ We are going to use TF-IDF as a way to summarise texts. We have seen how this is
 
 Below is a pretty cool graphic, where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
 
-```{r echo=FALSE, fig.height = 12, fig.width=15, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
+```{r echo=FALSE, fig.height = 9, fig.width=15, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
 library(ggrepel)
 
 at_words %>%
@@ -343,7 +343,7 @@ at_words %>%
   mutate(row=row_number()) %>%
   ggplot(aes(speech_id, 1)) + 
   geom_point(color = "red") +
-  geom_text_repel(
+  geom_text_repel(size = 4,
     aes(label=word, size = tf_idf),
     nudge_y      = 0.06,
     direction    = "y",
@@ -358,6 +358,8 @@ at_words %>%
   theme(legend.position="none") +
   theme_bw()
 ```
+
+**Please open this image in a new tab to see it more clearly!**
 
 Early on in the debate, there's lots of talk about "citizens". Then there is a period of debate about nuclear bodies/Euratom. Then a period where lots of industries and issues are mentioned including education, fishing, the NHS and women's rights. The rest of the debate is largely about Parliamant's role in the decisions made by the government, and the assurances for devolved administrations. 
 
