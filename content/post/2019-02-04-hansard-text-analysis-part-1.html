@@ -4,6 +4,7 @@ author: Matt Chaib
 date: '2019-02-04'
 slug: hansard-text-analysis-part-1
 categories:
+  - Hansard Text Analysis
   - R
 tags:
   - text analysis
@@ -24,20 +25,20 @@ tags:
 <div id="counting-things-that-matter" class="section level2">
 <h2>Counting things that matter</h2>
 <p>In this article, <em>setting the stage</em>, I would like to give an overview on what we can expect to find out from text mining an individual Hansard and introduce the tools and ideas that will be used in later analyses.</p>
-<p>A <a href="#hansard">Hansard</a>, which is really just a transcript of a debate held in Parliament, is a structured piece of text. Text is organised chronologically into speeches given by each <a href="#peer">peer</a>/MP- not unlike the script for a play. What is the relevance of this to our analysis? It turns out that this structure allows us to access lots of information which is separate from the text itself. So our first big question is: <strong>What can we measure in the text?</strong></p>
+<p>A <a href="#hansard">Hansard</a>, which is really just a transcript of a debate held in Parliament, is a structured piece of text. Text is organised chronologically into speeches given by each <a href="#peer">peer</a>/MP- not unlike the script for a play. What is the relevance of this to our analysis? It turns out that this structure allows us to access lots of information which is separate from the text itself. So our first big question is: <strong>What can we measure?</strong></p>
 <p>Here are some examples before we move on:</p>
 <ul>
 <li>Which MPs spoke in the debate.</li>
 <li>How often each MP spoke.</li>
 <li>What order MPs spoke in.</li>
 </ul>
-<p>In the house of Lords, each speakers name is prefixed by a title- Lord, Baroness, Lady, etc… From this we can infer the gender of the MP. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself.</p>
+<p>In the house of Lords, each speaker’s name is prefixed by a title- Lord, Baroness, Lady, etc… From this we can infer the gender of the peer. We can also extract their party (provided next to their title). If we wanted to, we could even search for external metadata such as age, or Alma Mater, but for now we will stick exclusively to what we can gleen from the Hansard itself.</p>
 <p>We are starting to build up the backbone of our analysis. To make things clearer, here is a diagram:</p>
 <div class="figure">
 <img src="/post/2019-02-04-hansard-text-analysis-part-1_files/expl_vs_res2.png" alt="Explanatory and response variables within a Hansard text." />
 <p class="caption">Explanatory and response variables within a Hansard text.</p>
 </div>
-<p>There is information in the Hansard, which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.</p>
+<p>There is information in the Hansard which we might try to use to explain other data in the Hansard. There are lots of terms for this in statistical lingo but we will say there are explanatory variables which can be used to understand patterns in response variables. Put in context, there might be differences in the number and length of speeches of MPs from different parties, or of different genders. There is also likely to be assocations between some of these factors themselves- different parties will have different proportions of speakers from each gender. Which patterns are meaningful and interesting, and how to separate out the effects of this interacting network of variables, we will come to later. But for now appreciate the depth of things we can look at without even digging into the nature of the text itself.</p>
 <p>Before we look at the text data itself, we need to get our bearings. We will begin by visualising who was present, and counting the number of speeches made by different groups of peers.</p>
 <div id="who-turned-up" class="section level3">
 <h3>Who turned up?</h3>
@@ -47,20 +48,25 @@ tags:
 Figure 1: CB=crossbench, GP=green party, PC=Privy council, UUP=Ulster Unionists Party
 </p>
 </div>
-<p>The figure shows that the majority of MPs belong to the three major parties or <a href="#Crossbench">crossbench</a>, and that the faction with the most MPs present are the Conservatives. I have also coloured in the bars to indicate the proportion of male versus female peers in each party. Needless to say, the vast majority of female representation in the house comes from Labour and the Liberal Democrats.</p>
+<p>This figure shows that the majority of MPs belong to the three major parties or <a href="#Crossbench">crossbench</a>, and that the faction with the most MPs present are the Conservatives. I have also coloured in the bars to indicate the proportion of male versus female peers in each party. Needless to say, the vast majority of female representation in the house comes from Labour and the Liberal Democrats.</p>
 <p>To get this data, we have just counted up all the unique speakers, and recorded their party and gender using information from the headers.</p>
 <div class="figure">
 <img src="/post/2019-02-04-hansard-text-analysis-part-1_files/hans_names.png" alt="The Hansard text as it appears on the Parliamentary Hansard website." />
 <p class="caption">The Hansard text as it appears on the Parliamentary Hansard website.</p>
 </div>
-<p>A more robust system might combine this scraping with the use of a curated database of current MPs and their associated information, but I’m trying to work exclusively with data from the Hansard for now. This actually touches on a general point I would like to elaborate on in a later article. A publically maintained and curated database could make this process much easier and more accurate. It would cost little to implement and maintain for a voluntary group (or even paid civil servants). The point is, although the Government is getting better at sharing data, there is a general failure to make the data that is shared adequate for research or computational analysis. It’s a kind of quasi-transparency. Simple structures could be put in place to streamline available data into standardised, tidy, well-organised file formats. Instead we often see MPs accounts uploaded as PDFs of scrawled, handwritten receipts; no system to download large batches of available files; or a popular one is publishing a CSV of the processed data, but not the raw data. We are lucky in this case to have access to a plaintext file and not have to web scrape the Hansard for ourselves.</p>
+<p>A more robust system might combine this scraping with the use of a curated database of current MPs and their associated information, but I’m trying to work exclusively with data from the Hansard for now. This actually touches on a general point I would like to elaborate on in a later article. A publically maintained and curated database could make this process much easier and more accurate. It would cost little to implement and maintain for a voluntary group (or even paid civil servants). The point is, although the Government is getting better at sharing data, there is a general failure to make the data that is shared adequate for research or computational analysis. It’s a kind of quasi-transparency. Simple structures could be put in place to streamline available data into standardised, tidy, well-organised file formats. Instead we often see MPs accounts uploaded as PDFs of scrawled, handwritten receipts; no system to download large batches of available files; or a popular one is publishing a spreadsheet of the processed data, but not the raw data. We are lucky in this case to have access to a plaintext file and not have to web scrape the Hansard for ourselves.</p>
 </div>
 <div id="which-mp-or-group-of-mps-spoke-most-often" class="section level3">
 <h3>Which MP or group of MPs spoke most often?</h3>
 <p>The next interesting thing to look at might be which party is making the most speeches.</p>
-<p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-2-1.png" alt="The red bars are the expected number of speeches, the blue bars are the number of speeches that were actually made." width="672" />
+<p class="caption">
+Figure 2: The red bars are the expected number of speeches, the blue bars are the number of speeches that were actually made.
+</p>
+</div>
 <p>We first count the number of appearances each individual made in the Hansard. When considering different groups of speakers (for instance, the Labour party vs the Conservative party), it is important to remember that each group is present in different numbers. This affects how we think about the results, for example: if the conservatives have 4% more speakers than the labour party, we would expect to see them give 4% more of the speeches.</p>
-<p>However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches.</p>
+<p>However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches. Number of speeches given is not independent of political party (chi_sq = 24.3, df = 7, p &lt; 0.05).</p>
 <p><strong>Example calculation:</strong> <em>There were 28 Conservative MPs and 95 MPs in total, <code>28 / 95 = 0.29</code> so 29% of the speakers present are Conservatives. If there were 251 speeches throughout the day we would expect <code>0.29 * 251 = 73</code> speeches to be given by Conservative MPs.</em></p>
 <p>In reality this number was closer to 100. Let’s look into this in more detail…</p>
 <pre><code>## # A tibble: 95 x 3
@@ -82,13 +88,23 @@ Figure 1: CB=crossbench, GP=green party, PC=Privy council, UUP=Ulster Unionists 
 </div>
 <div id="section" class="section level2 tabset tabset-fade">
 <h2></h2>
-<div id="figure-1" class="section level3 tabset">
-<h3>Figure 1</h3>
-<p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="figure-3" class="section level3 tabset">
+<h3>Figure 3</h3>
+<div class="figure"><span id="fig:unnamed-chunk-4"></span>
+<img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-4-1.png" alt="The distribution of speech numbers coloured by party." width="672" />
+<p class="caption">
+Figure 3: The distribution of speech numbers coloured by party.
+</p>
 </div>
-<div id="figure-2" class="section level3 tabset">
-<h3>Figure 2</h3>
-<p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="figure-4" class="section level3 tabset">
+<h3>Figure 4</h3>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
+<img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-5-1.png" alt="The distribution of speech numbers as an empirical cumulative distribution function." width="672" />
+<p class="caption">
+Figure 4: The distribution of speech numbers as an empirical cumulative distribution function.
+</p>
+</div>
 </div>
 </div>
 <div id="section-1" class="section level2">
@@ -107,18 +123,23 @@ Figure 1: CB=crossbench, GP=green party, PC=Privy council, UUP=Ulster Unionists 
 </div>
 <div id="section-2" class="section level2 tabset tabset-fade">
 <h2></h2>
-<div id="figure-3" class="section level3 tabset">
-<h3>Figure 3</h3>
+<div id="figure-5" class="section level3 tabset">
+<h3>Figure 5</h3>
 <div class="figure"><span id="fig:unnamed-chunk-7"></span>
 <img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-7-1.png" alt="Number of speeches in each quarter (panel) of the Hansard." width="672" />
 <p class="caption">
-Figure 2: Number of speeches in each quarter (panel) of the Hansard.
+Figure 5: Number of speeches in each quarter (panel) of the Hansard.
 </p>
 </div>
 </div>
-<div id="figure-4" class="section level3 tabset">
-<h3>Figure 4</h3>
-<p><img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div id="figure-6" class="section level3 tabset">
+<h3>Figure 6</h3>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="/post/2019-02-04-hansard-text-analysis-part-1_files/figure-html/unnamed-chunk-8-1.png" alt="As above but y values are speeches as proportion of total speeches made by each party." width="672" />
+<p class="caption">
+Figure 6: As above but y values are speeches as proportion of total speeches made by each party.
+</p>
+</div>
 </div>
 </div>
 <div id="section-3" class="section level2">

@@ -1,5 +1,5 @@
 ---
-title: Text Mining the EU withdrawal bill Hansard (Part 2)
+title: Text Mining the EU withdrawal bill Hansard
 author: Matt Chaib
 date: '2019-02-05'
 slug: text-mining-the-eu-withdrawal-bill-hansard
@@ -81,8 +81,8 @@ For comparison, take a look at a 135 word and 400 word speech. Using my internal
 uq_median <- at_nostop %>% filter((total > 400 & total < 430) | (total > 130 & total < 140))
 
 uq_median <- appearances_tib %>%
-  semi_join(uq_median) %>%
-  left_join(uq_median)
+  semi_join(uq_median, by="speech_id") %>%
+  left_join(uq_median, by="speech_id")
 
 uq_median %>% 
   filter(speech_id %in% c(86, 220)) %>%
@@ -309,7 +309,7 @@ Looks messy, let's talk it through. Generally, TF-IDF seems to have pulled out w
 
 *As a complete and inconsequential aside before we move on*, here are the top 10 TF-IDF scores from every speech in rank order from most important to least important.
 
-```{r}
+```{r echo=FALSE}
 at_words %>%
   select(-total) %>%
   arrange(desc(tf_idf)) %>%
@@ -326,7 +326,7 @@ We are going to use TF-IDF as a way to summarise texts. We have seen how this is
 
 Below is a pretty cool graphic, where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
 
-```{r, fig.width=12, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
+```{r echo=FALSE, fig.width=12, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
 library(ggrepel)
 
 at_words %>%
