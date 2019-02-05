@@ -92,7 +92,7 @@ For comparison, take a look at a 135 word and 400 word speech. Using my internal
 # Need nicer looking tables...
 ```
 
-Take a look at Baroness Smith's 135 word speech [here](http://bit.ly/2SaRP80) and Baroness Stowell's 420 word speech <a href="http://bit.ly/2SaKh4Z" target="_blank">here</a> for comparison.
+Take a look at Baroness Smith's 135 word speech <a href="http://bit.ly/2SaRP80" target="_blank">here</a> and Baroness Stowell's 420 word speech <a href="http://bit.ly/2SaKh4Z" target="_blank">here</a> for comparison.
 
 We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?
 
