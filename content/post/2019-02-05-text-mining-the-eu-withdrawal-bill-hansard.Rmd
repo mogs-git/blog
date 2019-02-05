@@ -17,14 +17,14 @@ tags:
 # Setup #
 pacman::p_load(tidyverse, magrittr, tidytext) 
 
-full_speeches <- readRDS("..//data//full_speeches_2.RDAT")
-appearances_tib <- readRDS("..//data//appearances_2.RDAT")
+full_speeches <- readRDS("../eu_hansard/data/full_speeches_2.RDAT") # a tibble of lords and all their speeches (concatenated together)
+appearances_tib <- readRDS("../eu_hansard/data/appearances_2.RDAT") # a tibble of all the speeches in the chronological order they were made
 
 appearances_tib %<>% mutate(speech_id = row_number())
 ```
 
 
-This article will explore how text mining can be used to gather data from Parliamentary transcripts (Hansards). This will build on ideas from another article I wrote: if you haven't read the first part, find that [here](). I will again lean heavily on methods I learned from [Julia Silge](https://juliasilge.com/) and [David Robinson](http://varianceexplained.org/about/) in their book [Text mining with R](https://www.tidytextmining.com/) and the [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html) package.
+This article will explore how text mining can be used to gather data from Parliamentary transcripts (Hansards). This will build on ideas from another article I wrote: if you haven't read the first part, find that [here](post/2019/02/04/hansard-text-analysis-part-1/). I will again lean heavily on methods I learned from [Julia Silge](https://juliasilge.com/) and [David Robinson](http://varianceexplained.org/about/) in their book [Text mining with R](https://www.tidytextmining.com/) and the [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html) package.
 
 What information do we want to mine a text for? You can imagine that we have a set of documents, an example of this might be a set of news articles about the performance of different companies. Often, articles don't come in a format immediately appropriate for analysis so will first have to be "cleaned" and "standardised", but we will ignore that for now. 
 
