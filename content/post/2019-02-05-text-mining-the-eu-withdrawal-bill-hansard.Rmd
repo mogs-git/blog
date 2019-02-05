@@ -359,8 +359,6 @@ at_words %>%
   ggpubr::theme_pubr()
 ```
 
-**Open the image in a new tab**
-
 Early on in the debate, there's lots of talk about "citizens". Then there is a period of debate about nuclear bodies/Euratom. Then a period where lots of industries and issues are mentioned including education, fishing, the NHS and women's rights. The rest of the debate is largely about Parliamant's role in the decisions made by the government, and the assurances for devolved administrations. 
 
 
