@@ -24,7 +24,7 @@ appearances_tib %<>% mutate(speech_id = row_number())
 ```
 
 
-This article will explore how text mining can be used to gather data from Parliamentary transcripts (Hansards). This will build on ideas from another article I wrote: if you haven't read the first part, find that [here](post/2019/02/04/hansard-text-analysis-part-1/). I will again lean heavily on methods I learned from [Julia Silge](https://juliasilge.com/) and [David Robinson](http://varianceexplained.org/about/) in their book [Text mining with R](https://www.tidytextmining.com/) and the [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html) package.
+This article will explore how text mining can be used to gather data from Parliamentary transcripts (Hansards). This will build on ideas from another article I wrote: if you haven't read the first part, find that [here](../../04/hansard-text-analysis-part-1/). I will again lean heavily on methods I learned from [Julia Silge](https://juliasilge.com/) and [David Robinson](http://varianceexplained.org/about/) in their book [Text mining with R](https://www.tidytextmining.com/) and the [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html) package.
 
 What information do we want to mine a text for? You can imagine that we have a set of documents, an example of this might be a set of news articles about the performance of different companies. Often, articles don't come in a format immediately appropriate for analysis so will first have to be "cleaned" and "standardised", but we will ignore that for now. 
 
@@ -77,18 +77,22 @@ The vast majority of speeches were at the shorter end of the distribution. The m
 
 For comparison, take a look at a 135 word and 400 word speech. Using my internal "speech length" indicator, these results are telling me that 75% of speeches are not really very long at all. Indeed, a 400 word speech only takes 1.5 to 2 minutes to read aloud. 
 
-```{r, echo = FALSE, eval = TRUE}
-uq_median <- at_nostop %>% filter((total > 400 & total < 430) | (total > 130 & total < 140))
+```{r, echo = FALSE}
+# uq_median <- at_nostop %>% filter((total > 400 & total < 430) | (total > 130 & total < 140))
+# 
+# uq_median <- appearances_tib %>%
+#   semi_join(uq_median, by="speech_id") %>%
+#   left_join(uq_median, by="speech_id")
+# 
+# uq_median %>% 
+#   filter(speech_id %in% c(86, 220)) %>%
+#   select(name, speeches, total) %>%
+#   unnest()
 
-uq_median <- appearances_tib %>%
-  semi_join(uq_median, by="speech_id") %>%
-  left_join(uq_median, by="speech_id")
-
-uq_median %>% 
-  filter(speech_id %in% c(86, 220)) %>%
-  select(name, speeches, total) %>%
-  unnest()
+# Need nicer looking tables...
 ```
+
+Take a look at Baroness Smith's 135 word speech [here](http://bit.ly/2SaRP80) and Baroness Stowell's 420 word speech [here](http://bit.ly/2SaKh4Z) for comparison.
 
 We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?
 
