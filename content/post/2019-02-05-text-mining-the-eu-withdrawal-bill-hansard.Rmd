@@ -69,6 +69,7 @@ at_nostop %>%
   geom_vline(data = at_ns_sum, aes(xintercept = LQ), colour = "blue") + 
   geom_vline(data = at_ns_sum, aes(xintercept = UQ), colour = "green") +
   scale_x_continuous(breaks = seq(0,2000,200)) +
+  xlab(label="total number of words") +
   theme_bw()
 
 ```
