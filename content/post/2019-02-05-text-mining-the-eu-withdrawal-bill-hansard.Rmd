@@ -97,7 +97,7 @@ Take a look at Baroness Smith's 135 word speech [here](http://bit.ly/2SaRP80) an
 We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?
 
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="The relationship between the number of speeches a lord gives and the number of words they use."}
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="The relationship between the number of speeches a lord gives and the number of words they use.", fig.width=10, fig.height=10}
 # Number of words in each speech (NO STOP WORDS)
 at_words <- appearances_tib %>%
   unnest_tokens(word, speeches) %>%
@@ -146,7 +146,7 @@ As we might expect, the more speeches you give, the more words you use in total.
 
 Let's pick out the MPs who made five or more speeches, and look not just at the total number of words, but the number of words used in each of their speeches (to understand the spread).
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="As above but with specific boxplots for each peer."}
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="As above but with specific boxplots for each peer.", fig.width=10, fig.height=10}
 at_words %>%
   group_by(speech_id) %>%
   summarise(total = sum(n)) %>%
@@ -330,7 +330,7 @@ We are going to use TF-IDF as a way to summarise texts. We have seen how this is
 
 Below is a pretty cool graphic, where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
 
-```{r echo=FALSE, fig.width=12, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
+```{r echo=FALSE, fig.height = 12, fig.width=15, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
 library(ggrepel)
 
 at_words %>%

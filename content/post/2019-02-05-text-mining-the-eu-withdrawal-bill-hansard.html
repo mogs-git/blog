@@ -30,7 +30,7 @@ tags:
 <p>Take a look at Baroness Smith’s 135 word speech <a href="http://bit.ly/2SaRP80">here</a> and Baroness Stowell’s 420 word speech <a href="http://bit.ly/2SaKh4Z">here</a> for comparison.</p>
 <p>We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?</p>
 <div class="figure"><span id="fig:unnamed-chunk-4"></span>
-<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-4-1.png" alt="The relationship between the number of speeches a lord gives and the number of words they use." width="672" />
+<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-4-1.png" alt="The relationship between the number of speeches a lord gives and the number of words they use." width="960" />
 <p class="caption">
 Figure 1: The relationship between the number of speeches a lord gives and the number of words they use.
 </p>
@@ -38,7 +38,7 @@ Figure 1: The relationship between the number of speeches a lord gives and the n
 <p>As we might expect, the more speeches you give, the more words you use in total. But this correlation is far from perfect and there is a glaring outlier in the two Lords who made 12 speeches both using hardly any words.</p>
 <p>Let’s pick out the MPs who made five or more speeches, and look not just at the total number of words, but the number of words used in each of their speeches (to understand the spread).</p>
 <div class="figure"><span id="fig:unnamed-chunk-5"></span>
-<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-5-1.png" alt="As above but with specific boxplots for each peer." width="672" />
+<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-5-1.png" alt="As above but with specific boxplots for each peer." width="960" />
 <p class="caption">
 Figure 2: As above but with specific boxplots for each peer.
 </p>
@@ -166,7 +166,7 @@ Figure 4: The words are on the y axis and their TF-IDF is the position of each b
 <p>We are going to use TF-IDF as a way to summarise texts. We have seen how this is like pulling important words from a “bag of words” (each speech). The meaning from the context which the words were used in is inevitably lost, but it’s a useful heuristic and the way TF-IDF is calculated is transparent (not a black box).</p>
 <p>Below is a pretty cool graphic, where I’ve extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF.</p>
 <div class="figure"><span id="fig:unnamed-chunk-11"></span>
-<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-11-1.png" alt="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely." width="1152" />
+<img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-11-1.png" alt="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely." width="1440" />
 <p class="caption">
 Figure 5: The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (<a href="https://slowkow.com/" class="uri">https://slowkow.com/</a>) for making ggrepel which organises the text so nicely.
 </p>
