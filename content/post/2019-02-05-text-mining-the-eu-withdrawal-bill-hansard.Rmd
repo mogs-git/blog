@@ -33,6 +33,7 @@ But what's our goal here? What information can we "mine" from the text that you 
 The approaches used here are useful for another simple reason: automation. Letting a program collect some of the available data for us is much faster and more accurate than doing things by hand.
 
 Let's start with what we can count. This will act as an outline for the rest of the article:
+
 - Total number of words (per speech)
 - Number of individual words 
 - Number of other grammatical features of the text (punctuation, grammatical category)
