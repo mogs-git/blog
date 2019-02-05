@@ -164,14 +164,14 @@ Figure 4: The words are on the y axis and their TF-IDF is the position of each b
 <div id="hansard-timeline-using-tf-idf" class="section level4">
 <h4>Hansard timeline using TF-IDF</h4>
 <p>We are going to use TF-IDF as a way to summarise texts. We have seen how this is like pulling important words from a “bag of words” (each speech). The meaning from the context which the words were used in is inevitably lost, but it’s a useful heuristic and the way TF-IDF is calculated is transparent (not a black box).</p>
-<p>Below is a pretty cool graphic, where I’ve extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF.</p>
+<p>Below is a pretty cool graphic (<strong>Open it in a new tab!</strong>), where I’ve extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF.</p>
 <div class="figure"><span id="fig:unnamed-chunk-11"></span>
 <img src="/post/2019-02-05-text-mining-the-eu-withdrawal-bill-hansard_files/figure-html/unnamed-chunk-11-1.png" alt="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely." width="1440" />
 <p class="caption">
 Figure 5: The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (<a href="https://slowkow.com/" class="uri">https://slowkow.com/</a>) for making ggrepel which organises the text so nicely.
 </p>
 </div>
-<p><strong>Please open this image in a new tab to see it more clearly!</strong></p>
+<p><strong>Open the image in a new tab</strong></p>
 <p>Early on in the debate, there’s lots of talk about “citizens”. Then there is a period of debate about nuclear bodies/Euratom. Then a period where lots of industries and issues are mentioned including education, fishing, the NHS and women’s rights. The rest of the debate is largely about Parliamant’s role in the decisions made by the government, and the assurances for devolved administrations.</p>
 <p>So TF-IDF is a pretty cool method for finding out the most important words in a text. But what are some problems with it? You might already have noticed some.</p>
 <ul>
