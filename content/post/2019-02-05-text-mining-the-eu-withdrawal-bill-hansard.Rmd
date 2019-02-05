@@ -74,7 +74,7 @@ at_nostop %>%
 ```
 The vast majority of speeches were at the shorter end of the distribution. The median number of words used was 135, with 75% of speeches using less than 418 words. The top 25% of speeches in terms of word counts range from 418 to almost 1800.
 
-For comparison, take a look at a 135 word and 400 word speech. Using my internal "speech length" indicator, these results are telling me that 75% of speeches are not really very long at all. Indeed, a 400 word speech only takes 1.5 to 2 minutes to read aloud. 
+For comparison, take a look at Baroness Smith's 135 word speech <a href="http://bit.ly/2SaRP80" target="_blank">here</a> and Baroness Stowell's 420 word speech <a href="http://bit.ly/2SaKh4Z" target="_blank">here</a> for comparison.. Using my internal "speech length" indicator, these results are telling me that 75% of speeches are not really very long at all. Indeed, a 400 word speech only takes 1.5 to 2 minutes to read aloud. 
 
 ```{r, echo = FALSE}
 # uq_median <- at_nostop %>% filter((total > 400 & total < 430) | (total > 130 & total < 140))
@@ -90,8 +90,6 @@ For comparison, take a look at a 135 word and 400 word speech. Using my internal
 
 # Need nicer looking tables...
 ```
-
-Take a look at Baroness Smith's 135 word speech <a href="http://bit.ly/2SaRP80" target="_blank">here</a> and Baroness Stowell's 420 word speech <a href="http://bit.ly/2SaKh4Z" target="_blank">here</a> for comparison.
 
 We also know that different MPs used different numbers of speeches. We would expect to see that the more speeches you make, the more words you use. Is this the case?
 
