@@ -109,7 +109,7 @@ speeches_by_party %>%
 
 We first count the number of appearances each individual made in the Hansard. When considering different groups of speakers (for instance, the Labour party vs the Conservative party), it is important to remember that each group is present in different numbers. This affects how we think about the results, for example: if the conservatives have 4% more speakers than the labour party, we would expect to see them give 4% more of the speeches.
 
-However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches.
+However, even taking into account the disproportionate numbers of speakers present for each party, the Conservatives still speak more often than we would expect. This in turn means that other parties spoke disproportionately less often than what would happen if speeches were perfectly fairly distributed among each group present. To summarise, the Conservatives had more Lords, and still made more than the their fair share of speeches. Number of speeches given is not independent of political party (chi_sq = 24.3, df = 7, p < 0.05).
 
 **Example calculation:** 
 *There were 28 Conservative MPs and 95 MPs in total, `28 / 95 = 0.29` so 29% of the speakers present are Conservatives. 
