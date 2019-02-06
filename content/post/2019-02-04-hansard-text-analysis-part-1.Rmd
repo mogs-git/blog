@@ -247,7 +247,7 @@ There is really a lot to say about what looks like quite a simple piece of data.
 
 We might like to think conspiratorially that this is some ploy to control certain aspects of the debate. Maybe. But other explanations arise naturally from how the debate operates. For example, each party has a [whip](#whip). There are more Conservative Lords, so their whip intervenes more often. This multiplies the number of consecutive speeches we see for the largest party, even though it is a natural outcome of having more speakers. In my second figure, I assume that you can calculate the expected number of speeches in a directly proportional way to the number of Lords. But this might not be the actual relationship. It might be that there is some compounding effect which means that a group with two times more lords than another makes triple, rather than double, the number of speeches. In this case, it is not a "Conservative Party" problem, but something that would affect any large group present. Indeed, drawing attention to the party at all may be a false flag, especially in the House of Lords where MPs act more independently. We have also seen that the Conservatives have less female MPs. This may in some way influence the frequency of speeches made. Ultimately, to really **understand** the patterns we see, we need to do controlled experiments. But the fact remains that in this discussion, one group spoke much more than the others and this may be a point requiring further investigation. The pieces of evidence in the article combined allow us to evaluate and criticise our political system, so long as we are careful about our interpretation.
 
-In the [next part](../../05/text-mining-the-eu-withdrawal-bill-hansard/), we will dig into the actual text of the Hansard. 
+In the [next part](../../05/text-mining-the-eu-withdrawal-bill-hansard/), we will dig into the actual text of the Hansard. Here is a link to the [github page](https://github.com/mogs-git/eu_hansard) for this project if you'd like to look at the code.
 
 ### Glossary {#glossary}
 #### Crossbench (CB) {#crossbench} 
@@ -267,3 +267,29 @@ A Hansard is the official transcript of proceedings of both the House of Commons
 A peer is just a member of the House of Lords (like an MP in the House of Commons) [source](https://www.parliament.uk/site-information/glossary/peer/)
 
 [An even better Glossary](https://www.theyworkforyou.com/glossary/)
+
+```{r echo=FALSE}
+## Code for chi-sq test:
+
+# exp_speeches_csq <-  exp_speeches %>% select(party, expected_nspeeches)
+# chi_tib <- speeches_by_party %>%
+#   left_join(exp_speeches_csq) %>%
+#   mutate(chisq = ((n_speeches - expected_nspeeches)^2)/(expected_nspeeches))
+# 
+# sum(chi_tib$chisq)
+# 
+# dof = 7
+# 
+# # Number of speeches is dependent on party
+# # Number of speeches is independent of party
+# 
+# Chi-Squared = 24.27488
+# 
+# Degrees of Freedom = 7
+# 
+# p = 0.00101926
+# 
+# # https://www.mathsisfun.com/data/chi-square-test.html
+
+```
+
