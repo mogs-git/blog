@@ -175,7 +175,8 @@ Boring definitions: Each text is composed of words. People who research [text mi
 # Counting #
 at_words %>%
   left_join(at_total) %>%
-  rename(speech_total = total)
+  rename(speech_total = total) %>%
+  DT::datatable()
 ```
 
 The first thing we do is count the number of times each word occurs in each speech, and also the total number of words in each speech. What can we do with this information?
@@ -249,7 +250,7 @@ idftib <- tibble(
   `Inverse document frequency (IDF)` = log(`Total number of documents`/`Word in X documents`),
   `Unlogged IDF` = `Total number of documents`/`Word in X documents`
 )
-idftib
+DT::datatable(idftib)
 ```
 ```{r echo=FALSE, fig.cap="If a word appears in 8 documents, how does the IDF change as we increase the number of documents?"}
 idftib %>%
@@ -315,7 +316,8 @@ Looks messy, let's talk it through. Generally, TF-IDF seems to have pulled out w
 at_words %>%
   select(-total) %>%
   arrange(desc(tf_idf)) %>%
-  head(10)
+  head(10) %>%
+  DT::datatable()
 ```
 
 I'll put it down to the absurdity of the universe that "bullet", "minorities" and "bodies" appeared as the top three most important words, and try not to worry too much about it.

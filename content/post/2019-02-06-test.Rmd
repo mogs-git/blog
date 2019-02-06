@@ -1,0 +1,18 @@
+---
+title: test
+author: Matt Chaib
+date: '2019-02-06'
+slug: test
+categories: []
+tags: []
+draft: TRUE
+---
+
+mtcars
+```{r}
+mtcars
+```
+
+```{r}
+DT::datatable(mtcars)
+```
