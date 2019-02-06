@@ -326,7 +326,7 @@ I'll put it down to the absurdity of the universe that "bullet", "minorities" an
 
 #### Hansard timeline using TF-IDF
 
-We are going to use TF-IDF as a way to summarise texts. We have seen how this is like pulling important words from a "bag of words" (each speech). The meaning from the context which the words were used in is inevitably lost, but it's a useful heuristic and the way TF-IDF is calculated is transparent (not a black box). 
+We are going to use TF-IDF as a way to summarise the Hansard. We have seen how this is like pulling important words from a "bag of words" (each speech). The meaning from the context which the words were used in is inevitably lost, but it's a useful heuristic and the way TF-IDF is calculated is transparent (not a black box). 
 
 Below is a pretty cool graphic (**Open it in a new tab!**), where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
 
