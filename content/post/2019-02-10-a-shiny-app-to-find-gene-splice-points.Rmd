@@ -14,7 +14,6 @@ tags:
   - Shiny
 ---
 
-
 ```{r, echo=FALSE, warning=FALSE}
 library(shiny)
 
