@@ -12,4 +12,4 @@ tags:
   - Shiny
 ---
 
-<iframe height="500" scrolling="no" src="https://mattc-apps.shinyapps.io/genesplice_app/"> </iframe>
+<iframe height="1200" width="1200" src="https://mattc-apps.shinyapps.io/genesplice_app/"> </iframe>
