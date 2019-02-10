@@ -1,5 +1,5 @@
 ---
-title: A Shiny app to find gene splice points
+title: A Shiny app to find gene splice points (for qPCR primer design)
 author: Matt Chaib
 date: '2019-02-10'
 slug: a-shiny-app-to-find-gene-splice-points
