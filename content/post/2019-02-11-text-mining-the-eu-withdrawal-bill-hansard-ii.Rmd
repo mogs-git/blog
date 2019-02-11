@@ -30,7 +30,6 @@ appearances_tib %<>% mutate(speeches = map_chr(speeches, as.vector))
 
 In my previous articles (<a href="../../04/hansard-text-analysis-part-1/" target="_blank">1</a>, 
 <a href="../../05/text-mining-the-eu-withdrawal-bill-hansard" target="_blank">2</a>), I explored how we can use the R programming language and some great packages for text mining to investigate a British <a href="https://hansard.parliament.uk/lords/2017-03-01/debates/EE9DF3A9-2E05-4568-8CF8-A61F11172391/EuropeanUnion(NotificationOfWithdrawal)Bill" target="_blank">Parliamentary Hansard</a> about withdrawing from the EU. Taking inspiration again from Julia Silge and David Robinson's brilliant book on [tidy text mining](https://www.tidytextmining.com/), this time we will try out more advanced analytical methods and get a bit more creative with the way we extract information from the text. 
-<a href="" target="_blank">link</a>
 
 Last time, we counted individuals words from each speech. Speeches are associated with categorical variables like the speaker, political party or gender. But why just split the text up into individual words? We know that some words naturally appear in groups (Mr. Smith, United Kingdom, European Union), so we might want to count groups of words- collectively known as "n-grams". We are specifically going to count pairs of words, which are known to text-mining aficionados as "bigrams" (which I have a habit of reading as *big rams*, making big rams a big ram).  
 
@@ -41,7 +40,7 @@ appearances_tib %>%
   DT::datatable() # Formats the table nicely (many thanks to the DT package).
 ```
 
-In case you've forgotten from last time, here is a snippet from our main data table for the analysis scraped from the Hansard plaintext by yours truly. We've got columns for the speaker, party, gender, speech, party again (as a factor for plotting purposes, and with minor parties condensed into "other") and the speech_id, which just describes the sequence speeches happened in. 
+In case you've forgotten since last time, here is a snippet from our main data table for the analysis scraped from the Hansard plaintext by yours truly. We've got columns for the speaker, party, gender, speech, party again (as a factor for plotting purposes, and with minor parties condensed into "other") and the speech_id, which just describes the sequence speeches happened in. 
 
 Now let's translate the words in those speeches into bigrams:
 ```{r echo=TRUE, fig.cap="A snippet of the bigrams data table so you get the idea."}
@@ -425,7 +424,7 @@ Considered as a proportion of all of their speeches, the Conservatives and Liber
 
 How do the topics of discussion change over the course of the Hansard? We've already looked at this superficially with top-scoring TF-IDF words in the previous blog post, but now we can try with our topic model. Remember, each speech is associated with four probabilities (adding to 1), one for each topic. This means we can plot how these probabilities change within speeches over the course of the debate. I have plotted smoothed curves which try and provide the "best fit" for the data, to give an easier interpretation of what's going on.   
 
-```{r, echo=FALSE, fig.width=12, message=F, warning=F}
+```{r, echo=FALSE, fig.height=10, fig.width=12, message=F, warning=F}
 smoothplot <- speeches_gamma %>%
   left_join(topictib, by="topic") %>%
   ggplot(aes(as.numeric(speech_id), gamma, colour = as.factor(topic_name))) +
