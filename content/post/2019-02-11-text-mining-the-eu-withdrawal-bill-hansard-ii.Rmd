@@ -463,7 +463,7 @@ The plot below looks like some we've plotted before, but be careful- the X-axis 
 
 `us_me_ratio=n_us_words/n_me_words` then took the log of this value `log2(us_me_ratio)`. Taking the logarithm scales the values so that a value of zero indicates no difference in the number of us versus me words, and every change by 1 indicates that the usage of us vs me words has doubled or halved (I used a log of 2).
 
-```{r, echo=FALSE, fig.width=12}
+```{r, echo=FALSE, fig.height=9, fig.width=12}
 me_words <- c("My", "my", "Me", "me", "I", "i")
 us_words <- c("We", "we", "our", "Our", "us", "Us")
 
