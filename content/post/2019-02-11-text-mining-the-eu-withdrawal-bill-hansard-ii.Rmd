@@ -31,6 +31,9 @@ appearances_tib %<>% mutate(speeches = map_chr(speeches, as.vector))
 In my previous articles (<a href="../../04/hansard-text-analysis-part-1/" target="_blank">1</a>, 
 <a href="../../05/text-mining-the-eu-withdrawal-bill-hansard" target="_blank">2</a>), I explored how we can use the R programming language and some great packages for text mining to investigate a British <a href="https://hansard.parliament.uk/lords/2017-03-01/debates/EE9DF3A9-2E05-4568-8CF8-A61F11172391/EuropeanUnion(NotificationOfWithdrawal)Bill" target="_blank">Parliamentary Hansard</a> about withdrawing from the EU. Taking inspiration again from Julia Silge and David Robinson's brilliant book on [tidy text mining](https://www.tidytextmining.com/), this time we will try out more advanced analytical methods and get a bit more creative with the way we extract information from the text. Fair warning: **this post is long**. 
 
+
+## Bigrams
+
 Last time, we counted individuals words from each speech. Speeches are associated with categorical variables like the speaker, political party or gender. But why just split the text up into individual words? We know that some words naturally appear in groups (Mr. Smith, United Kingdom, European Union), so we might want to count groups of words- collectively known as "n-grams". We are specifically going to count pairs of words, which are known to text-mining aficionados as "bigrams" (which I have a habit of reading as *big rams*, making big rams a big ram).  
 
 ```{r}
