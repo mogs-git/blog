@@ -179,7 +179,7 @@ at_words %>%
   DT::datatable()
 ```
 
-The first thing we do is count the number of times each word occurs in each speech, and also the total number of words in each speech. Unsurprisingly in a bill about Britain's withdrawal from the EU, terms like "EU", "citizen" and "European" come up often. So does "Lord", which is also unsurpising given the location of the debate. But we also see words like "women", "nuclear" and "devolved" being used many times in some speeches. Is there a better way for us to access this information about which words were *most important* in the debate?
+The first thing we do is count the number of times each word occurs in each speech, and also the total number of words in each speech. Unsurprisingly in a bill about Britain's withdrawal from the EU, terms like "EU", "citizen" and "European" come up often. So does "Lord", which is also unsurpising given the location of the debate. But we also see words like "women", "nuclear", "euratom" (the European Atomic Energy Community) and "devolved" being used many times in some speeches. Is there a better way for us to access this information about which words were *most important* in the debate?
 
 ------
 
