@@ -85,8 +85,8 @@ bigrams_filtered &lt;- bigrams_separated %&gt;%
 ##  8 prime    minister           61
 ##  9 eu       citizens           59
 ## 10 devolved administrations    41</code></pre>
-<p>Now we have a table containing the <strong>raw counts</strong> every bigram in the Hansard. Take a peak and see which occur most. “Noble Lord” is a classic way of introducing another Lord in a speech in the House of Lords. Article 50 is a nice piece of writing detailing that the UK is going to leave the EU (sadface). Devolved administrations is another UK specific piece of lingo, meaning the governmental institutions of Wales, Scotland and Northern Ireland. Most of the other common bigrams are pretty self-explanatory.</p>
-<p>Now let’s visualise the bigrams as a network, where each node is a word and the edges tell us which words are connected as bigrams and how often they were used (the strength of the line).</p>
+<p>Now we have a table containing the <strong>raw counts</strong> of every bigram in the Hansard. Take a peak and see which occur most. <em>“Noble Lord”</em> is a classic way of introducing another Lord in a speech in the House of Lords. <em>Article 50</em> is a nice piece of writing detailing that the UK is going to leave the EU (sadface). <em>Devolved administrations</em> is another UK specific piece of lingo, meaning the governmental institutions of Wales, Scotland and Northern Ireland. Most of the other common bigrams are pretty self-explanatory.</p>
+<p>Now let’s visualise the bigrams as a network, where each node is a word. The edges tell us which words are occur consecutively (i.e. as bigrams) and how often that bigram appeared (the strength of the line).</p>
 <pre class="r"><code>library(igraph)
 bigram_graph &lt;- bigram_counts %&gt;%
   filter(n &gt; 5) %&gt;%
@@ -376,7 +376,7 @@ Figure 8: The proportion of speeches assigned to each topic from each of the big
 <p>I haven’t delved into this too much, but all I can say is hats off to Baroness Stowell of Beeston. She is the most inclusive Lord out there by a long shot, and if you read <a href="http://bit.ly/2SaKh4Z" target="_blank">her speech</a> you’ll see that she really cares about our <em>collective responsibility</em> for withdrawing from the EU.</p>
 <div id="part-of-speech-tagging" class="section level3">
 <h3>Part-of-speech tagging</h3>
-<p>That’s just a fancy way of saying we’re going to label every word in a text as an “adjective” or a “noun” or a “verb” etc… Some people who are much smarter than I am have spent a good while <a href="https://opennlp.apache.org/" target="_blank">training machines</a> to do this and were so kind as to make it all open source. I’m not an expert, but from what I understand the OpenNLP tools are “pretty good” at accurately identifying the POS of each word, so that’s what we’re going to use.</p>
+<p><strong>Part of speech tagging</strong> is just a fancy way of saying we’re going to label every word in a text as an “adjective” or a “noun” or a “verb” etc… Some people who are much smarter than I am have spent a good while <a href="https://opennlp.apache.org/" target="_blank">training machines</a> to do this and were kind enough to make it all open source. I’m not an expert, but from what I understand the OpenNLP tools are pretty good at accurately identifying the POS of each word, so that’s what we’re going to use.</p>
 <pre class="r"><code>pacman::p_load(NLP, openNLP, openNLPmodels.en)
 
 # Function to annotate a specific text
@@ -406,8 +406,8 @@ anno &lt;- function(text, pattern = &quot;NN&quot;) {
   text_tib %&gt;%
     filter(str_detect(tags, pattern)) %&gt;% left_join(pos_tag_abbrs, by = c(&quot;tags&quot; = &quot;abbreviation&quot;))
 } </code></pre>
-<p>I’ve shown this bit of code to illustrate that beauty is in the eye of the beholder. The anno function is something I wrote, which was heftily borrowed from the <a href="https://www.rdocumentation.org/packages/openNLP/versions/0.2-6/topics/Maxent_POS_Tag_Annotator" target="_blank">openNLP documentation</a> (in R). All it does is take a bunch of text, and return a data table with each word and its associated ‘POS tag’.</p>
-<p>There’s quite a bit of cool stuff you can do with this data, and one thing people are fond of is counting the number of nouns, adjectives etc… and seeing what the most common ones are. We’re going to skip all of that and ask a different question. Can we identify different groups of speakers based on the proportion of adjectives, nouns, and verbs they use? That’s right, rather than pay attention to <em>which</em> words are being used, we’re going to just count them (again). But the result is a bit surprising, and it’s still quite involved.</p>
+<p>I’ve shown this bit of code to illustrate that beauty is in the eye of the beholder. The <code>anno()</code> function is something I wrote, which was heftily borrowed from the <a href="https://www.rdocumentation.org/packages/openNLP/versions/0.2-6/topics/Maxent_POS_Tag_Annotator" target="_blank">openNLP documentation</a> (in R). It takes some text and returns a data table with each word and the associated ‘POS tag’ (e.g. “go” and “verb”).</p>
+<p>There’s quite a bit of cool stuff you can do with this data, and one thing people are fond of is counting the number of nouns, adjectives etc… and seeing what the most common ones are. We’re going to skip all of that and ask a different question. <strong>Can we identify different groups of speakers based on the proportion of adjectives, nouns, and verbs they use?</strong> That’s right, rather than pay attention to <em>which</em> words are being used, we’re going to just count them (again).</p>
 <pre class="r"><code>prep_speeches &lt;- appearances_tib %&gt;% #annotated_speeches
   anti_join(small_speeches, by=&quot;speech_id&quot;) %&gt;%
   mutate(speeches = map(speeches, ~anno(., &quot;.+&quot;)))</code></pre>
@@ -432,17 +432,17 @@ attr(distmat, &quot;Labels&quot;) &lt;- ling_profiles$name # add peers names as 
 clust &lt;- distmat %&gt;%
   hclust()</code></pre>
 <p>Now for the nasty part. We take the data for the proportions of each tag, and we calculate the <em>Euclidian distance</em> between each speakers profile. What on earth does that mean?</p>
-<p>Our speakers each have data for 3 things: verbs, adjectives and nouns. This data can be arranged in 3-dimensional space like so.</p>
+<p>We have collcted three pieces of data for each speaker: the proportion of verbs, adjectives and nouns. This data can be arranged in 3-dimensional space like so (the x, y and z axis are the proportion of each.</p>
 <div class="figure">
 <img src="/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian1_5.png" />
 
 </div>
-<p>Then, the Euclidian distance is a simple way of saying “calculate the distance between each of these points”.</p>
+<p>Then, the Euclidian distance is a simple way of saying “calculate the distance between each of these points”. (Nb. In some cases, it is necessary to “normalise” your variables before calculating the Euclidian distance. If for example one variable is measured on a higher order of magnitude, you could end up with that one variable contributing to all the difference in distance, which makes other variables irrelevant.)</p>
 <div class="figure">
 <img src="/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian2.png" />
 
 </div>
-<p>So we end up with a big table where we record the distance of each point from every other point. In fact, because you asked, here’s a little snippet of it.</p>
+<p>So we end up with a big table where we record the distance of each point from every other point. Here’s a little snippet of it:</p>
 <pre><code>##        1     2     3     4     5     6     7     8     9    10
 ## 1  0.000 0.044 0.011 0.074 0.053 0.025 0.024 0.056 0.023 0.039
 ## 2  0.044 0.000 0.051 0.102 0.028 0.037 0.060 0.017 0.041 0.025
@@ -454,20 +454,20 @@ clust &lt;- distmat %&gt;%
 ## 8  0.056 0.017 0.063 0.106 0.042 0.042 0.067 0.000 0.048 0.029
 ## 9  0.023 0.041 0.033 0.062 0.055 0.012 0.024 0.048 0.000 0.023
 ## 10 0.039 0.025 0.049 0.080 0.043 0.022 0.046 0.029 0.023 0.000</code></pre>
-<p>This is what the “distance matrix” would look like for ten speakers.</p>
-<p>Then we use a heirarchical clustering algorithm to try and find out how the points are organised into groups (or clusters) based on the distances between each point. There’s a bit more to it than this, but a heirarchical clustering algorithm like <code>hclust()</code> in R looks through the distance matrix for the smallest number- indicating the two points that are closest together in 3D space in our image:</p>
+<p>This is what the “distance matrix” would look like for ten speakers. Speaker 1 is more similar to Speaker 3 than Speaker 2 (the distance between 1 and 3 is less).</p>
+<p>Then we use a <a href="https://www.youtube.com/watch?v=XJ3194AmH40" target="_blank">heirarchical clustering algorithm</a> to try and find out how the points are organised into groups (or clusters) based on the distances between each point. There’s a bit more to it than this, but a heirarchical clustering algorithm (e.g. <code>hclust()</code> in R) looks through the distance matrix for the smallest number- indicating the two points that are closest together in 3D space in our image like so:</p>
 <div class="figure">
 <img src="/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian3.png" />
 
 </div>
 <p>That might be these two points in our toy example. The algorithm then puts these two points into the same cluster, and repeats this process until all the points are sorted into one big cluster. You could imagine this making something like a tree, where pairs of points are added to clusters until you reach the root, where all the points are in one cluster:</p>
 <pre class="r"><code>plot(clust)</code></pre>
-<p><img src="/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/figure-html/unnamed-chunk-29-1.png" width="768" /></p>
-<p>Our job is now to decide what an appropriate number of clusters is. If that sounds arbitrary and vague that’s because it is. Knowing what the “right” number of clusters is depends on the context. We can look at the tree made by the algorithm above, and see that two clusters of Lords are joined together quite far up the tree- implying that these two clusters are far apart in the 3D graph. These two clusters then each split into another pair, after which the distance between clusters is much smaller in successive joins. So we’ll tell the algorithm to return 4 clusters.</p>
-<pre class="r"><code>members &lt;- cutree(clust, k = 4)
-members &lt;- tibble(name=names(members), cluster=members)</code></pre>
-<p>You can imagine that each peer has now been assigned to one of three clusters based on their linguistic profile.</p>
-<p>One thing you can do to get an idea of what is driving the differences between your clusters is to plot the parallel coordinates of each of your variables:</p>
+<p><img src="/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
+<p>Our job is now to decide what an <em>appropriate number of clusters</em> is. If that sounds arbitrary and vague that’s because it is. Knowing what the “right” number of clusters is depends on the context. We can look at the tree made by the algorithm above, and see that two clusters of Lords are joined together quite far up the tree- implying that these two clusters are far apart in the 3D graph. These two clusters then each split into another pair, after which the distance between clusters is much smaller in successive joins. So we’ll tell the algorithm to return 4 clusters.</p>
+<pre class="r"><code>members &lt;- cutree(clust, k = 4) # Cut our tree into four separate clusters.
+members &lt;- tibble(name=names(members), cluster=members) # Make a data frame from the results.</code></pre>
+<p>You can imagine that each peer has now been assigned to one of four clusters based on their linguistic profile.</p>
+<p>One thing you can do to get an idea of what is driving the differences between your clusters is to plot the <a href="https://datavizcatalogue.com/methods/parallel_coordinates.html" target="_blank">parallel coordinates</a> of each of your variables:</p>
 <pre class="r"><code>parcoord &lt;- ling_profiles %&gt;%
   select(name, p_verbs, p_adjs, p_nouns) %&gt;%
   left_join(members) %&gt;%
@@ -504,7 +504,7 @@ ling_profiles %&gt;%
 <pre class="r"><code>DT::datatable(group_characteristics)</code></pre>
 <div id="htmlwidget-5" style="width:100%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-5">{"x":{"filter":"none","data":[["1","2","3","4"],[1,2,3,4],[0.148,0.167,0.13,0.198],[0.07,0.062,0.075,0.047],[0.235,0.207,0.265,0.174],[0.014,0.011,0.021,0.019],[0.016,0.01,0.01,0.011],[0.012,0.012,0.021,0.011]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cluster<\/th>\n      <th>verb_median<\/th>\n      <th>adj_median<\/th>\n      <th>noun_median<\/th>\n      <th>sd_verb<\/th>\n      <th>sd_adj<\/th>\n      <th>sd_noun<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<p>Now this is cool. The first two groups of peers use pretty similar proportions of each grammatical feature, but one group uses marginally less nouns and marginally more verbs. The next two clusters, each containing 6 and 5 peers respectively, have markedly different distributions. <em>Cluster 3</em> use a much higher proportion of nouns than verbs. They use on average <strong>66%-88%</strong> of the <strong>verbs</strong> other clusters do, while using <strong>26-53% more nouns</strong>. <em>Cluster 4</em> is even weirder, these peers generally use more verbs than nouns but also on average were using only <strong>63%-76%</strong> as many <strong>adjectives</strong> as other groups of peers.</p>
+<p>Now this is cool. The first two groups of peers use pretty similar proportions of each grammatical feature, but one group uses marginally less nouns and marginally more verbs. The next two clusters, each containing 6 and 5 peers respectively, have markedly different distributions. <em>Cluster 3</em> use a much <strong>higher proportion of nouns than verbs</strong>. They use on average <em>66%-88%</em> of the <strong>verbs</strong> other clusters do, while using <em>26-53%</em> <strong>more nouns</strong>. <em>Cluster 4</em> is even weirder, these peers generally use more verbs than nouns but also on average were using only <em>63%-76%</em> as many <strong>adjectives</strong> as other groups of peers.</p>
 <pre><code>##           1         2         3        4
 ## 1 1.0000000 1.1290323 0.9333333 1.489362
 ## 2 0.8857143 1.0000000 0.8266667 1.319149

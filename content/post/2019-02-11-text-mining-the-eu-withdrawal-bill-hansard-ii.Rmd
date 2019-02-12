@@ -78,9 +78,9 @@ bigrams_filtered <- bigrams_separated %>%
   `[`(1:10,)
 ```
 
-Now we have a table containing the **raw counts** every bigram in the Hansard. Take a peak and see which occur most. "Noble Lord" is a classic way of introducing another Lord in a speech in the House of Lords. Article 50 is a nice piece of writing detailing that the UK is going to leave the EU (sadface). Devolved administrations is another UK specific piece of lingo, meaning the governmental institutions of Wales, Scotland and Northern Ireland. Most of the other common bigrams are pretty self-explanatory. 
+Now we have a table containing the **raw counts** of every bigram in the Hansard. Take a peak and see which occur most. *"Noble Lord"* is a classic way of introducing another Lord in a speech in the House of Lords. *Article 50* is a nice piece of writing detailing that the UK is going to leave the EU (sadface). *Devolved administrations* is another UK specific piece of lingo, meaning the governmental institutions of Wales, Scotland and Northern Ireland. Most of the other common bigrams are pretty self-explanatory. 
 
-Now let's visualise the bigrams as a network, where each node is a word and the edges tell us which words are connected as bigrams and how often they were used (the strength of the line). 
+Now let's visualise the bigrams as a network, where each node is a word. The edges tell us which words are occur consecutively (i.e. as bigrams) and how often that bigram appeared (the strength of the line). 
 
 ```{r, message=F, warning=F, error=F, fig.width=10, fig.height=10, fig.cap="To get this network, I dropped every pair of words that appeared less than five times in the whole Hansard. Remaining words are placed on the graph and lines connected between the ones that occur together in pairs. The strength of the line tells us how often the pair of words were used. An algorithm sorts out the points so that connected nets of words are plotted close to one another and not overlapping with other nets (Thanks [igraph](https://igraph.org/r/) and [ggraph](https://github.com/thomasp85/ggraph)!)."}
 library(igraph)
@@ -502,7 +502,7 @@ I haven't delved into this too much, but all I can say is hats off to Baroness S
 
 ### Part-of-speech tagging
 
-That's just a fancy way of saying we're going to label every word in a text as an "adjective" or a "noun" or a "verb" etc... Some people who are much smarter than I am have spent a good while <a href="https://opennlp.apache.org/" target="_blank">training machines</a> to do this and were so kind as to make it all open source. I'm not an expert, but from what I understand the OpenNLP tools are "pretty good" at accurately identifying the POS of each word, so that's what we're going to use. 
+**Part of speech tagging** is just a fancy way of saying we're going to label every word in a text as an "adjective" or a "noun" or a "verb" etc... Some people who are much smarter than I am have spent a good while <a href="https://opennlp.apache.org/" target="_blank">training machines</a> to do this and were kind enough to make it all open source. I'm not an expert, but from what I understand the OpenNLP tools are pretty good at accurately identifying the POS of each word, so that's what we're going to use. 
 
 ```{r}
 pacman::p_load(NLP, openNLP, openNLPmodels.en)
@@ -536,9 +536,9 @@ anno <- function(text, pattern = "NN") {
 } 
 ```
 
-I've shown this bit of code to illustrate that beauty is in the eye of the beholder. The anno function is something I wrote, which was heftily borrowed from the <a href="https://www.rdocumentation.org/packages/openNLP/versions/0.2-6/topics/Maxent_POS_Tag_Annotator" target="_blank">openNLP documentation</a> (in R). All it does is take a bunch of text, and return a data table with each word and its associated 'POS tag'. 
+I've shown this bit of code to illustrate that beauty is in the eye of the beholder. The `anno()` function is something I wrote, which was heftily borrowed from the <a href="https://www.rdocumentation.org/packages/openNLP/versions/0.2-6/topics/Maxent_POS_Tag_Annotator" target="_blank">openNLP documentation</a> (in R). It takes some text and returns a data table with each word and the associated 'POS tag' (e.g. "go" and "verb"). 
 
-There's quite a bit of cool stuff you can do with this data, and one thing people are fond of is counting the number of nouns, adjectives etc... and seeing what the most common ones are. We're going to skip all of that and ask a different question. Can we identify different groups of speakers based on the proportion of adjectives, nouns, and verbs they use? That's right, rather than pay attention to *which* words are being used, we're going to just count them (again). But the result is a bit surprising, and it's still quite involved. 
+There's quite a bit of cool stuff you can do with this data, and one thing people are fond of is counting the number of nouns, adjectives etc... and seeing what the most common ones are. We're going to skip all of that and ask a different question. **Can we identify different groups of speakers based on the proportion of adjectives, nouns, and verbs they use?** That's right, rather than pay attention to *which* words are being used, we're going to just count them (again). 
 
 ```{r}
 prep_speeches <- appearances_tib %>% #annotated_speeches
@@ -576,15 +576,15 @@ clust <- distmat %>%
 
 Now for the nasty part. We take the data for the proportions of each tag, and we calculate the *Euclidian distance* between each speakers profile. What on earth does that mean?
 
-Our speakers each have data for 3 things: verbs, adjectives and nouns. This data can be arranged in 3-dimensional space like so.
+We have collcted three pieces of data for each speaker: the proportion of verbs, adjectives and nouns. This data can be arranged in 3-dimensional space like so (the x, y and z axis are the proportion of each.
 
 ![](/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian1_5.png)
 
-Then, the Euclidian distance is a simple way of saying "calculate the distance between each of these points".
+Then, the Euclidian distance is a simple way of saying "calculate the distance between each of these points". (Nb. In some cases, it is necessary to "normalise" your variables before calculating the Euclidian distance. If for example one variable is measured on a higher order of magnitude, you could end up with that one variable contributing to all the difference in distance, which makes other variables irrelevant.)
 
 ![](/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian2.png)
 
-So we end up with a big table where we record the distance of each point from every other point. In fact, because you asked, here's a little snippet of it. 
+So we end up with a big table where we record the distance of each point from every other point. Here's a little snippet of it:
 
 ```{r, echo=FALSE}
 distmat2 <- distmat
@@ -592,28 +592,28 @@ attr(distmat2, "Labels") <- 1:length(ling_profiles$name)
 round(as.matrix(distmat2),3)[1:10, 1:10]
 ```
 
-This is what the "distance matrix" would look like for ten speakers.
+This is what the "distance matrix" would look like for ten speakers. Speaker 1 is more similar to Speaker 3 than Speaker 2 (the distance between 1 and 3 is less).
 
-Then we use a heirarchical clustering algorithm to try and find out how the points are organised into groups (or clusters) based on the distances between each point. There's a bit more to it than this, but a heirarchical clustering algorithm like `hclust()` in R looks through the distance matrix for the smallest number- indicating the two points that are closest together in 3D space in our image:
+Then we use a <a href="https://www.youtube.com/watch?v=XJ3194AmH40" target="_blank">heirarchical clustering algorithm</a> to try and find out how the points are organised into groups (or clusters) based on the distances between each point. There's a bit more to it than this, but a heirarchical clustering algorithm (e.g. `hclust()` in R) looks through the distance matrix for the smallest number- indicating the two points that are closest together in 3D space in our image like so:
 
 ![](/post/2019-02-11-text-mining-the-eu-withdrawal-bill-hansard-ii_files/euclidian3.png)
 
 That might be these two points in our toy example. The algorithm then puts these two points into the same cluster, and repeats this process until all the points are sorted into one big cluster. You could imagine this making something like a tree, where pairs of points are added to clusters until you reach the root, where all the points are in one cluster:
 
-```{r, fig.height=8, fig.width=8}
+```{r, fig.height=8, fig.width=12}
 plot(clust)
 ```
 
-Our job is now to decide what an appropriate number of clusters is. If that sounds arbitrary and vague that's because it is. Knowing what the "right" number of clusters is depends on the context. We can look at the tree made by the algorithm above, and see that two clusters of Lords are joined together quite far up the tree- implying that these two clusters are far apart in the 3D graph. These two clusters then each split into another pair, after which the distance between clusters is much smaller in successive joins. So we'll tell the algorithm to return 4 clusters. 
+Our job is now to decide what an *appropriate number of clusters* is. If that sounds arbitrary and vague that's because it is. Knowing what the "right" number of clusters is depends on the context. We can look at the tree made by the algorithm above, and see that two clusters of Lords are joined together quite far up the tree- implying that these two clusters are far apart in the 3D graph. These two clusters then each split into another pair, after which the distance between clusters is much smaller in successive joins. So we'll tell the algorithm to return 4 clusters. 
 
 ```{r}
-members <- cutree(clust, k = 4)
-members <- tibble(name=names(members), cluster=members)
+members <- cutree(clust, k = 4) # Cut our tree into four separate clusters.
+members <- tibble(name=names(members), cluster=members) # Make a data frame from the results.
 ```
 
-You can imagine that each peer has now been assigned to one of three clusters based on their linguistic profile. 
+You can imagine that each peer has now been assigned to one of four clusters based on their linguistic profile. 
 
-One thing you can do to get an idea of what is driving the differences between your clusters is to plot the parallel coordinates of each of your variables:
+One thing you can do to get an idea of what is driving the differences between your clusters is to plot the <a href="https://datavizcatalogue.com/methods/parallel_coordinates.html" target="_blank">parallel coordinates</a> of each of your variables:
 
 ```{r, fig.width=9, warning=F, message=F}
 parcoord <- ling_profiles %>%
@@ -656,7 +656,7 @@ ling_profiles %>%
 DT::datatable(group_characteristics)
 ```
 
-Now this is cool. The first two groups of peers use pretty similar proportions of each grammatical feature, but one group uses marginally less nouns and marginally more verbs. The next two clusters, each containing 6 and 5 peers respectively, have markedly different distributions. *Cluster 3* use a much higher proportion of nouns than verbs. They use on average **66%-88%** of the **verbs** other clusters do, while using **26-53% more nouns**. *Cluster 4* is even weirder, these peers generally use more verbs than nouns but also on average were using only **63%-76%** as many **adjectives** as other groups of peers. 
+Now this is cool. The first two groups of peers use pretty similar proportions of each grammatical feature, but one group uses marginally less nouns and marginally more verbs. The next two clusters, each containing 6 and 5 peers respectively, have markedly different distributions. *Cluster 3* use a much **higher proportion of nouns than verbs**. They use on average *66%-88%* of the **verbs** other clusters do, while using *26-53%* **more nouns**. *Cluster 4* is even weirder, these peers generally use more verbs than nouns but also on average were using only *63%-76%* as many **adjectives** as other groups of peers. 
 
 ```{r, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 a <- group_characteristics$adj_median
