@@ -59,7 +59,9 @@ What we want to do is to use the information about the coding regions to find se
 
 In our lab, researchers generally did this process using a text editor like Microsoft Word, counting along the DNA sequences and doing the reformatting and cut/pasting by hand. Eventually you would have a coding sequence with all the splice points highlighted/identified on it. 
 
-As shown below, I wrote a Shiny app in R where you can feed in a gene's sequence, the coding sequence and the coding regions. The app then does all the processing for you, and spits out a coding region with full stops present at the splice points. Here are links to the GUS2 <a href="https://www.arabidopsis.org/servlets/TairObject?type=sequence&id=2002973848" target="_blank">gene sequence</a>, <a href="https://www.arabidopsis.org/servlets/TairObject?type=sequence&id=1000912356" target="_blank">coding sequence</a> and <a href="https://www.arabidopsis.org/servlets/TairObject?name=AT5G07830.1&type=gene" target="_blank">coding regions</a> (under gene features) to try out for yourself.
+As shown below, I wrote a Shiny app in R where you can feed in a gene's sequence, the coding sequence and the coding regions. The app then does all the processing for you, and spits out a coding region with full stops present at the splice points. Here's a [link to the code](https://github.com/mogs-git/gene_splice_app) if you're interested. 
+
+Here are links to the GUS2 <a href="https://www.arabidopsis.org/servlets/TairObject?type=sequence&id=2002973848" target="_blank">gene sequence</a>, <a href="https://www.arabidopsis.org/servlets/TairObject?type=sequence&id=1000912356" target="_blank">coding sequence</a> and <a href="https://www.arabidopsis.org/servlets/TairObject?name=AT5G07830.1&type=gene" target="_blank">coding regions</a> (under gene features) to try out for yourself.
 
 (*Note: to enter the coding regions, you can copy and paste that specific part of the "gene features" table, or enter each number in order with a comma between them.)
 
