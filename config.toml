@@ -31,4 +31,4 @@ footnotereturnlinkcontents = "↩"
 
 [params]
     description = "A website built through Hugo and blogdown."
-    footer = "[Matt Chaib](https://www.mattchaib.com) 2019 | [Github](https://github.com/mogs-git) | [Twitter](https://twitter.com/mattchaib)"
+    footer = "[Matt Chaib](https://www.mattchaib.com) 2019 | [Github](https://github.com/mogs-git) | [Twitter](https://twitter.com/mattchaib) | [XMin theme](https://github.com/yihui/hugo-xmin)"

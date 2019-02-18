@@ -1,0 +1,152 @@
+---
+title: 'Tidy HansaRd: a Shiny app to reformat Hansards'
+author: Matt Chaib
+date: '2019-02-18'
+slug: tidy-hansard-a-shiny-app-to-reformat-hansards
+categories:
+  - Hansard Text Analysis
+  - R
+tags:
+  - Shiny
+  - text analysis
+  - R
+  - politics
+---
+
+Recently, I've made several posts about analysing [Hansards](https://hansard.parliament.uk/), i.e. transcripts from British Parliamentary debates, which can be found [here](/categories/hansard-text-analysis/). A big part of that process is simply getting the Hansard from plaintext form to a *tidy data table*, where you have one column for the peer's `name`, one for each `speech`, and then it's also nice to have columns for `gender` and `party` along with a `speech_id` column. 
+
+Essentially, how do you go from this:
+
+`"European Union (Notification of Withdrawal) Bill\r\n\r\nCommittee (2nd Day)\r\n\r\n15:37:00\r\n\r\nRelevant document: 8th Report from the Constitution Committee\r\n\r\nClause 1: Power to notify withdrawal from the EU\r\n\r\nAmendment 9A had been retabled as Amendment 16A.\r\n\r\nAmendment 9B\r\n\r\nMoved by\r\n\r\n9B: Clause 1, page 1, line 3, at end insert—\r\n “( ) Within three months of exercising the power under section 1(1), "`
+
+To this:
+
+```{r, echo=F,message=F,warning=F,error=F}
+library(tidyverse)
+DT::datatable(mutate(readRDS("../eu_hansard/data/example_h.rdat"),text = str_sub(text, 1, 200))) 
+```
+
+
+I wrote a script which pretty much does all of this [for you](https://github.com/mogs-git/hansard_cleaner_final/tree/master/cleaning_script), but realised that it would be even more powerful for those who don't use R to be able to just upload Hansard text files to an app, and have the app do all the processing, then let users download the tidy spreadsheets. Below, and linked [here](https://mattc-apps.shinyapps.io/hansard_cleaner_final/) is a free app written using Shiny R that does all this. 
+
+Currently it only works for Hansards from the House of Lords, mainly because lots of the functions rely on naming conventions used in the House of Lords. All I mean by that really is you can infer gender from the title of the lord, and titles are standardised making it easier to identify headings etc... But I'm working on a version that also tidies Hansards from the House of Commons. I'd also previously done some webscraping using `rvest` to get more information about each Lords political party, which I'm yet to repeat for the MPs in the House of Commons.  
+
+At some point I'll update this post with more information about the code involved, but here are the key features:
+
+```{r}
+create_header_table <- function(hansard_plaintext) {
+  tibble(headers = unlist(str_extract_all(hansard_plaintext, "\n[^\n\r]*\r"))) %>% # pull out all headers
+    mutate(possible_name = str_length(headers) < 150 & !str_detect(headers, "\r\n\r\n")) %>% # mark those short enough to be a name
+    filter(possible_name)
+}
+```
+
+It begins by basically searching through the text file for escape character sequences that indicate headers. It then systematically searches this for headers that might be the names of peers.
+
+```{r}
+extract_base_names <- function(peers_id) {
+  peers_id %>% 
+    mutate(base_name = case_when(
+      awkward ~ str_sub(str_extract(entire_title, "\\([^)]+\\)"), 2, -2), # if two sets of brackets, get name from first set
+      !awkward & contains_party ~ str_sub(str_extract(entire_title, "[a-zA-Z ',\\-]+"), 1, -2), # if party, ignore party
+      !awkward & !contains_party ~ entire_title # if just a name, just use the name
+    ))
+}
+```
+
+The names of peers come in different forms (sometimes they have party attached, or a different title preceding them), so we then need to pull out a unique name identifying each peer.
+
+```{r}
+create_party_id_table <- function(peers_id) {
+  out <- peers_id %>%
+    filter(contains_party) %>%
+    mutate(party = str_extract(entire_title, "\\([a-zA-Z-]*\\)")) %>%
+    distinct(base_name, party) 
+  
+  out
+}
+```
+
+The political party of each Peer is written in the first header which they appear in, in brackets. For example "Baroness Hayter of Kentish Town (Lab)". This function searches for that header and pulls out the party for that Peer. 
+
+```{r}
+add_gender <- function(df) {
+  printf <- function(...) invisible(print(sprintf(...)))
+  
+  gender_vector <- vector("character", length(df$base_name))
+  for (i in seq_along(df$base_name)) {
+    if (str_detect(df$base_name[i], "Lord|Viscount|Archbishop|Bishop|Earl")) {
+      gender_vector[i] <- "male"
+    } else if (str_detect(df$base_name[i], "Baroness|Lady|Countess|Duchess")){
+      gender_vector[i] <- "female"
+    } else {
+      gender_vector[i] <- NA
+    }
+  }
+  
+  out <- df %>% add_column(gender = gender_vector)
+  
+  n_unassigned <- sum(is.na(out$gender))
+  
+  if (n_unassigned == 0) {
+    printf("All Peers assigned to a gender!")
+  } else {
+    printf("%i Peers could not be assigned to a gender. Check is.na(.$gender).", n_unassigned)
+  }
+  
+  return(out)
+}
+```
+
+Later on this gnarly looking function (which is actually pretty simple) assigns a gender to each Peer. Gender is inferred in a lovely hard-coded way by looking at the title of the peer preceding their name. 
+
+```{r}
+bind_text <- function(hansard_plaintext, peers, remove_exclamations=T) {
+  
+  # First task, find all headers and their start and end locations
+  loc <- tibble(headers = str_sub(unlist(str_extract_all(hansard_plaintext, "\n[^\n\r]*\r")), start = 2, end = -2),
+                start = str_locate_all(hansard_plaintext, "\n[^\n\r]*\r")[[1]][,1],
+                end = str_locate_all(hansard_plaintext, "\n[^\n\r]*\r")[[1]][,2]) 
+  
+  # extract the headers which we have previously confirmed as belonging to peers
+  peer_headers <- unique(peers$entire_title) # all headers corresponding to a peer
+  
+  # Using the headers assigned to peers and their locations in the text,
+  # assume that all the text between these headers belongs to a single speech for that peer, and
+  # assign it to that Lord.
+  peers <- distinct(peers)
+  
+  text <- loc %>%
+    filter(headers %in% peer_headers) %>%
+    mutate(speech_start = end, speech_end = lead(start),
+           speech_end = ifelse(is.na(speech_end), str_length(hansard_plaintext), speech_end)) %>% # If last speech, it ends at the end of the hansard (bit sketchy)
+    select(-start, -end) %>%
+    mutate(text = str_sub(hansard_plaintext, speech_start, speech_end),
+           text = str_replace_all(text, "\\n|\\r", ""),
+           text = str_replace_all(text, "[0-9][0-9]:[0-9][0-9]:[0-9][0-9]", "")) %>%
+    select(-speech_start, -speech_end) 
+  
+  # Now clean up this table using the peers tibble
+  
+  text <- text %>%
+    rename(entire_title=headers) %>%
+    left_join(peers, by = "entire_title") %>%
+    rename(name=base_name) %>%
+    select(name, text, party, gender) %>%
+    {if(remove_exclamations) filter(., !str_detect(text, "^My Lords—$")) else .} %>%
+    mutate(speech_id = row_number())
+  
+  return(text)
+}
+```
+
+Finally for the biggest but most important function, `bind_text()`. This is also conceptually very simple, don't let the code scare you away. There are really only two steps:
+
+- Search for location of headers corresponding to a Peer (The start of a speech)
+- Find all the text **between** each of these headers, and pair this with the previous header.
+
+That's all there is to it. I've skipped out some less important steps, but all it really amounts to is identfying Peers in the headers, adding data like gender and party, and finally pulling out the text associated with each speech. 
+
+#### The tidy HansaRd app
+
+<iframe height="600" width="1200" src="https://mattc-apps.shinyapps.io/hansard_cleaner_final/"> </iframe>
