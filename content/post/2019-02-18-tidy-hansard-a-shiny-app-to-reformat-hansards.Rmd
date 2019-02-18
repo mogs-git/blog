@@ -26,6 +26,9 @@ library(tidyverse)
 DT::datatable(mutate(readRDS("../eu_hansard/data/example_h.rdat"),text = str_sub(text, 1, 200))) 
 ```
 
+## [Link to the app](https://mattc-apps.shinyapps.io/hansard_cleaner_final/)
+
+Or read more below...
 
 I wrote a script which pretty much does all of this [for you](https://github.com/mogs-git/hansard_cleaner_final/tree/master/cleaning_script), but realised that it would be even more powerful for those who don't use R to be able to just upload Hansard text files to an app, and have the app do all the processing, then let users download the tidy spreadsheets. Below, and linked [here](https://mattc-apps.shinyapps.io/hansard_cleaner_final/) is a free app written using Shiny R that does all this. 
 
