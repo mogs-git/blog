@@ -163,13 +163,13 @@ at_nostop %>%
   labs(color="Number of speeches")
 ```
 
-There are clearly different strategies, or perhaps roles, for each different MP. Baroness Hayter makes a similar number of speeches to Tebbit and Hannay, but her speeches are generally longer (none being exceptionally short or long). Lord Taylor, in contrast has an incredibly tight distribution of very short speeches. This is telling- he is in fact the whip of the Conservative party, so his speeches consist exclusively of short rebukes. Lord Howard, a eurosceptic, speaks as a contrarian to many of the amendments moved by other MPs, leading to a large number of short arguments. Lord Bridges, who shows the most variation in speech lengths, was the Government's secretary for DxEU. 
+There are clearly different strategies, or perhaps roles, for each different MP. Baroness Hayter makes a similar number of speeches to Tebbit and Hannay, but her speeches are generally longer. Lord Taylor, in contrast has an incredibly tight distribution of very short speeches. This is telling- he is in fact the whip of the Conservative party, so his speeches consist exclusively of short rebukes. Lord Howard, a eurosceptic, speaks as a contrarian to many of the amendments moved by other MPs, leading to a large number of short arguments. Lord Bridges, who shows the most variation in speech lengths, was the Government's secretary for the department for exiting the EU. 
 
 As we can see, even these raw numbers of words tell a story. But now we will move onto...
 
 #### The text itself. 
 
-Boring definitions: Each text is composed of words. People who research [text mining](https://en.wikipedia.org/wiki/Text_mining) and apply this in [natural language processing](https://en.wikipedia.org/wiki/Natural_language_processing) (NLP) refer to each body of text as a document. Think different newspaper articles, different books by an author. We could treat all of these as documents. *Corpus* is the word used to refer to a collection of documents. Now let's think about scale. There are lots of Hansards about Brexit. So we could (and later will) make a corpus of Hansard documents. But here, I have chosen to focus on what can be gleaned from **a single debate**. For our purposes, we will treat *speeches* as each document, and the corpus will be the collection of speeches in the Hansard. 
+Each text is composed of words. People who research [text mining](https://en.wikipedia.org/wiki/Text_mining) and apply this in [natural language processing](https://en.wikipedia.org/wiki/Natural_language_processing) (NLP) refer to each body of text as a document. Think different newspaper articles, different books by an author. We could treat all of these as documents. *Corpus* is the word used to refer to a collection of documents. Now let's think about scale. There are lots of Hansards about Brexit. So we could (and later will) make a corpus of Hansard documents. But here, I have chosen to focus on what can be gleaned from **a single debate**. For our purposes, we will treat *speeches* as each document, and the corpus will be the collection of speeches in the Hansard. 
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.cap="Word counts, n (with stop words removed)"}
 # Counting #
@@ -202,11 +202,11 @@ If you want a really short and sweet explanation of TF-IDF go to http://www.tfid
 
 #### Question
 
-What if we just find the most common words? Surely the words that appear most are the most important?
+What if we just find the most common words in the speech? Shouldn't the most important words appear most often?
 
 #### Challenge 
 
-The most common words are just going to be uninformative ones like "the", "and", etc... 
+The most common words will be uninformative like "the", "and", etc... 
 
 #### Solution
 
@@ -222,26 +222,28 @@ Now we have counts of informative words, aren't the most common ones the most im
 
 #### Challenge
 
-Maybe. Earlier in the article we showed that speeches are of different lengths. A word which is used 50 times must be important, you might say? What if this was in a 50,000 word document? Probably not so important. 
+Earlier in the article we showed that speeches are of different lengths. What if a word is used 10 times in a 100-word speech compared to another word that is used 10 times in a 1000-word speech? Which word is "more important"?
 
 #### Solution
 
-We divide the frequency of each word by the total number of words in that speech. If we didn't normalise like this, when we try to compare the most important words between speeches, words from longer speeches would end up outranking words from shorter ones, even though they might proportionally have been used less.
+We divide the frequency of each word by the total number of words in that speech. If we didn't normalise like this, when we try to compare the most important words between speeches, words from longer speeches would end up outranking words from shorter ones just because on average each word was used more often. This isn't perfect- but TF-IDF is one way we can use the information we have about speech lengths to better inform which words are important.
 
 
 ------
 
 #### Question
 
-We've calculated the "normalised term frequency". What on earth else is needed to tell us what the important words are?
+We've calculated the "term frequency"... isn't this enough to decide which words are important?
 
 #### Challenge
 
-What do we actually mean by *important*? Imagine you have a set of newspapers articles about education. The word "school" and "teacher" probably appears in every document (with varying frequency), so we could penalise these words allowing other words that distinguish different speeches to be found. We could just remove these words that are shared between documents (treat them as "stop words"). But there is a better solution.  
+What do we actually mean by *important*? Imagine you have a set of newspapers articles about education. The word "school" and "teacher" probably appears in every article (with varying frequency), so we could penalise these words allowing other words that distinguish different articles to be found. We could just remove these words that are shared between documents (treat them as "stop words"). But there is a better solution.  
 
 #### Solution
 
-When we have our **term frequency**, we can multiply this by the **"Inverse document frequency"** for that word. How do we calculate this? Say you have 10 documents. You're word appears in 8 of them (it's a pretty common word). The inverse document frequency is equal to `log(10/8)`. Let's compare how this changes if we make our word rarer amongst the documents.
+After calculating the **term frequency**, we can multiply this by the **"Inverse document frequency"** for that word. 
+
+How do we calculate the inverse document frequency? Say you have 10 documents. You're word appears in 8 of them (it's a pretty common word). The inverse document frequency is equal to `log(10/8)`. Let's compare how this changes if we make our word rarer amongst the documents.
 
 ```{r echo=FALSE}
 idftib <- tibble(
@@ -266,7 +268,7 @@ That aside, as documents containing our word become *rarer*, the word's IDF scor
 
 TF-IDF ("Word importance") = Term frequency * Inverse Document Frequency
 
-More frequent terms get a higher score (good). Words that appear in a smaller fraction of documents get a higher score (also good). So if a word is unique to a speech and is used in it often, it gets a high score, because it defines that speech and not others. Low scoring words are either not used a lot in any speeches, or appear in almost every document- meaning they can't be used to accurately define any of them.
+More frequent terms get a higher score (good). Words that appear in a smaller fraction of documents get a higher score (also good). So if a word is unique to a speech and is used in it often, it gets a high score, because it defines that speech and not others. Low scoring words are either not used a lot in any speeches, or appear in almost every document- meaning they can't be used to distinguish any of them.
 
 ------
 
@@ -328,7 +330,7 @@ I'll put it down to the absurdity of the universe that "bullet", "minorities" an
 
 We are going to use TF-IDF as a way to summarise the Hansard. We have seen how this is like pulling important words from a "bag of words" (each speech). The meaning from the context which the words were used in is inevitably lost, but it's a useful heuristic and the way TF-IDF is calculated is transparent (not a black box). 
 
-Below is a pretty cool graphic (**Open it in a new tab!**), where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non-stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
+Below is a pretty cool graphic where I've extracted the word with the largest TF-IDF from each speech longer than 50 (non stop-word) words and displayed them chronologically. The size of the word represents its TF-IDF. 
 
 ```{r echo=FALSE, fig.height = 9, fig.width=15, fig.cap="The position of words on the y axis is irrelevant! Cheers to Kamil Slowikowski (https://slowkow.com/) for making ggrepel which organises the text so nicely."}
 library(ggrepel)
